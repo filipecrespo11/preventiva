@@ -1,25 +1,27 @@
-import {useState} from "react";
-import axios from "axios";  
-import {useNavigate} from "react-router-dom";
+import { useState } from "react";
+import axios from "axios";
+import { useRouter } from "expo-router";
 
-const cadastro = () => { 
+const CadastroScreen = () => {
   const [user, setUser] = useState({
     nome_usuario: "",
     username: "",
     password: "",
   });
 
-  const navigate = useNavigate();
+  const router = useRouter();
 
-  const handleChange = (e) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setUser({ ...user, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:3000/usuarios", usuarios );
-      navigate("/index");
+      await axios.post("http://localhost:3000/auterota/criausuarios", user);
+      router.push("/login"); // Redirect to login page after successful registration
+
     } catch (error) {
       console.error("Error creating user:", error);
     }
@@ -31,16 +33,15 @@ const cadastro = () => {
       <form onSubmit={handleSubmit}>
         <input
           type="text"
-          nome_usuario="nome_usuario"
+          name="nome_usuario"
           placeholder="Nome de usuário"
-          value={user.nome_usuario}
           value={user.nome_usuario}
           onChange={handleChange}
         />
         <input
-          type="username"
+          type="text"
           name="username"
-          placeholder="username"  
+          placeholder="Username"
           value={user.username}
           onChange={handleChange}
         />
@@ -55,4 +56,6 @@ const cadastro = () => {
       </form>
     </div>
   );
-}
+};
+
+export default CadastroScreen;
