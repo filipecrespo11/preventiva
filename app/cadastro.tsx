@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import { useRouter } from "expo-router";
+import { useRouter, Stack } from "expo-router";
 
 const CadastroScreen = () => {
   const [user, setUser] = useState({

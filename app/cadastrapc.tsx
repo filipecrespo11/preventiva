@@ -1,8 +1,11 @@
 import { useState } from "react";
 import axios from "axios";
-import { useRouter } from "expo-router";
+import { useRouter, Stack } from "expo-router";
+import { useAuth } from "./context/AuthContext";
+
 
 const CadastropcScreen = () => {
+  const { token } = useAuth(); // Obtém o token do contexto
   const [criapc, setUser] = useState({
     nome_computador: "",
     fabricante: "",
@@ -23,8 +26,23 @@ const CadastropcScreen = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if(!token) {
+      console.error("Token não encontrado. Certifique-se de que o usuário está autenticado.");
+      return;
+    }
+
+
     try {
-      await axios.post("http://localhost:3000/compurota/criacomputador", criapc);
+      
+      await axios.post("http://localhost:3000/compurota/criacomputador", criapc,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Inclui o token no cabeçalho
+          },
+        }
+
+      );
       router.push("/menu"); // Redirect to login page after successful registration
 
     } catch (error) {
@@ -34,7 +52,7 @@ const CadastropcScreen = () => {
 
   return (
     <div>
-      <h1>Cadastro de Maquina</h1>
+      <Stack.Screen options={{ title: "Cadastro de Maquina" }} />
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -93,6 +111,8 @@ const CadastropcScreen = () => {
           onChange={handleChange}
           />
           <button type="submit">Cadastrar</button>
+        
+        <button type="button" onClick={() => router.push("/menu")}>Voltar</button> 
         </form>
       </div>
     );

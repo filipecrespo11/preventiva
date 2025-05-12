@@ -2,18 +2,19 @@ import React from "react";
 import { View, Text, TextInput, Button } from "react-native";
 import { useState } from "react";
 import axios from "axios";
-import { useRouter } from "expo-router";
-import { useColorScheme } from "react-native";
+import { useRouter, Stack } from "expo-router";
+import { useAuth } from "./context/AuthContext";
 
 
 const LoginScreen = () => {
+  const { setToken } = useAuth(); // Obtém o setToken do contexto
   const [user, setUser] = useState({
     username: "",
     password: "",
   });
 
   const router = useRouter();
-  const colorScheme = useColorScheme();
+ 
   
 
   const handleChange = (field: string, value: string) => {
@@ -25,6 +26,7 @@ const LoginScreen = () => {
       const response = await axios.post("http://localhost:3000/auterota/login", user);
       if (response.status === 200) {
         console.log("Login successful");
+        setToken(response.data.token); // Armazena o token no contexto
         router.push("/menu");
       } else {
         console.log("Login failed");
@@ -35,12 +37,16 @@ const LoginScreen = () => {
   };
 
   return (
+
+    
     <View
+    
     style={{
       flex: 1,
       justifyContent: "center",
       alignItems: "center",
     }}>
+    <Stack.Screen options={{ title: "Login" }} />
       <Text style={{ fontSize: 30, marginBottom: 20 }}>Login</Text>
       <TextInput
         style={{

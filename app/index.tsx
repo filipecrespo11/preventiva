@@ -10,7 +10,7 @@ export default function Index() {
         alignItems: "center",
       }}
     >
-      <Stack.Screen options={{ title: "Manutenção Preventiva" }} />
+     
       <Link href="/login">
         <Text style={{ fontSize: 24, marginBottom: 20 }}>Login</Text>
       </Link>
