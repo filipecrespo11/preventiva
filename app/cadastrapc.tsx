@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useRouter, Stack } from "expo-router";
-import { useAuth } from "./context/AuthContext";
+import { useAuth } from "./context/AuthContext"; // Importa o contexto de autenticação
 
 
 const CadastropcScreen = () => {
@@ -43,7 +43,7 @@ const CadastropcScreen = () => {
         }
 
       );
-      router.push("/menu"); // Redirect to login page after successful registration
+      router.push("/tabs/menu"); // Redirect to login page after successful registration
 
     } catch (error) {
       console.error("Error creating user:", error);
@@ -112,7 +112,7 @@ const CadastropcScreen = () => {
           />
           <button type="submit">Cadastrar</button>
         
-        <button type="button" onClick={() => router.push("/menu")}>Voltar</button> 
+        <button type="button" onClick={() => router.push("/tabs/menu")}>Voltar</button> 
         </form>
       </div>
     );

@@ -29,7 +29,9 @@ const CadastroScreen = () => {
 
   return (
     <div>
-      <h1>Cadastro</h1>
+      
+      <Stack.Screen options={{ title: "Cadastro" }} />
+      
       <form onSubmit={handleSubmit}>
         <input
           type="text"

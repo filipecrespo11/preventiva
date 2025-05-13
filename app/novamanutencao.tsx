@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useRouter } from "expo-router";
+import { useRouter, Stack } from "expo-router";
 import { useAuth } from "./context/AuthContext";
 import { Picker } from "@react-native-picker/picker";
 import { jwtDecode } from "jwt-decode"; 
@@ -83,7 +83,7 @@ const NManutencao = () => {
           },
         }
       );
-      router.push("/menu"); // Redireciona para o menu após o cadastro
+      router.push("/tabs/menu"); // Redireciona para o menu após o cadastro
     } catch (error) {
       console.error("Erro ao criar manutenção:", error);
     }
@@ -91,7 +91,8 @@ const NManutencao = () => {
 
   return (
     <div>
-      <h1>Nova Manutenção</h1>
+      <Stack.Screen options={{ title: "Nova Manutenção" }} />
+    
       <p>Usuário logado: {nomeUsuario}
 
       </p>
@@ -158,7 +159,7 @@ const NManutencao = () => {
         />
         <button type="submit">Cadastrar</button>
         </form> 
-        <button onClick={() => router.push("/menu")}>Voltar</button>
+        <button onClick={() => router.push("/tabs/menu")}>Voltar</button>
     </div>
   );
 }

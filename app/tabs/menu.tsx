@@ -11,13 +11,15 @@ export default function Index() {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
+        backgroundColor: "#fff",
+        padding: 300,
       }}
     >
       
       <Link href="/login">
         <Text style={{ fontSize: 24, marginBottom: 20 }}>Login</Text>
       </Link>
-      <Link href="/cadastro">
+      <Link href="/tabs/cadastro">
         <Text style={{ fontSize: 24, marginBottom: 20 }}>Cadastro de usuarios</Text>
       </Link>
       <Link href="/cadastrapc">
@@ -26,7 +28,7 @@ export default function Index() {
         <Link href="/novamanutencao">
         <Text style={{ fontSize: 24, marginBottom: 20 }}>Nova de Manutenção</Text>
       </Link>
-      <Link href="/listapreventiva">
+      <Link href="/tabs/listapreventiva">
         <Text style={{ fontSize: 24, marginBottom: 20 }}>Lista de Manutenção</Text>
       </Link>
       <Link href="/listcomp">

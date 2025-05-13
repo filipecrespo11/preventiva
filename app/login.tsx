@@ -27,7 +27,7 @@ const LoginScreen = () => {
       if (response.status === 200) {
         console.log("Login successful");
         setToken(response.data.token); // Armazena o token no contexto
-        router.push("/menu");
+        router.push("/tabs/menu");
       } else {
         console.log("Login failed");
       }
@@ -38,15 +38,12 @@ const LoginScreen = () => {
 
   return (
 
+    <View>
+      <Stack.Screen options={{ title: "Login" }} />
+
+
+    <View>
     
-    <View
-    
-    style={{
-      flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
-    }}>
-    <Stack.Screen options={{ title: "Login" }} />
       <Text style={{ fontSize: 30, marginBottom: 20 }}>Login</Text>
       <TextInput
         style={{
@@ -76,6 +73,7 @@ const LoginScreen = () => {
         onChangeText={(value) => handleChange("password", value)}
       />
       <Button title="Login" onPress={handleSubmit} />
+    </View>
     </View>
   );
 };
