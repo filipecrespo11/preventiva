@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useRouter, Stack } from "expo-router";
-
+import Layout from "../componente/layout";
 const CadastroScreen = () => {
   const [user, setUser] = useState({
     nome_usuario: "",
@@ -28,6 +28,7 @@ const CadastroScreen = () => {
   };
 
   return (
+    <Layout>
     <div>
       
       <Stack.Screen options={{ title: "Cadastro" }} />
@@ -57,6 +58,7 @@ const CadastroScreen = () => {
         <button type="submit">Cadastrar</button>
       </form>
     </div>
+    </Layout>
   );
 };
 

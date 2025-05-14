@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useRouter, Stack } from "expo-router";
 import { useAuth } from "./context/AuthContext"; // Importa o contexto de autenticação
-
+import Layout from "./componente/layout";
 
 const CadastropcScreen = () => {
   const { token } = useAuth(); // Obtém o token do contexto
@@ -51,6 +51,7 @@ const CadastropcScreen = () => {
   };
 
   return (
+    <Layout>
     <div>
       <Stack.Screen options={{ title: "Cadastro de Maquina" }} />
       <form onSubmit={handleSubmit}>
@@ -115,6 +116,8 @@ const CadastropcScreen = () => {
         <button type="button" onClick={() => router.push("/tabs/menu")}>Voltar</button> 
         </form>
       </div>
+      </Layout>
+      
     );
   };
   

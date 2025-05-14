@@ -3,7 +3,8 @@ import axios from "axios";
 import { useRouter, Stack } from "expo-router";
 import { useAuth } from "./context/AuthContext";
 import { Picker } from "@react-native-picker/picker";
-import { jwtDecode } from "jwt-decode"; 
+import { jwtDecode } from "jwt-decode";
+import Layout from "./componente/layout"; 
 
 interface DecodedToken {
     id: string; // Certifique-se de que o campo corresponde ao ID do usuário no token
@@ -90,8 +91,9 @@ const NManutencao = () => {
   };
 
   return (
-    <div>
-      <Stack.Screen options={{ title: "Nova Manutenção" }} />
+    <Layout>
+    
+    <div>   
     
       <p>Usuário logado: {nomeUsuario}
 
@@ -161,6 +163,7 @@ const NManutencao = () => {
         </form> 
         <button onClick={() => router.push("/tabs/menu")}>Voltar</button>
     </div>
+    </Layout>
   );
 }
 

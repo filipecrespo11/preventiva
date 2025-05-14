@@ -8,8 +8,10 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         <h1>Manutenção Preventiva</h1>
       </header>
 
-      {/* Conteúdo da Página */}
-      <main style={styles.main}>{children}</main>
+      {/* Conteúdo Principal */}
+      <main style={styles.main}>
+        <div style={styles.content}>{children}</div>
+      </main>
 
       {/* Rodapé */}
       <footer style={styles.footer}>
@@ -23,33 +25,38 @@ const styles = {
   container: {
     display: "flex",
     flexDirection: "column" as const,
-    minHeight: "100vh", // Ajustado para ocupar a altura total da janela
+    minHeight: "100vh", // Garante que o layout ocupe toda a altura da janela
+    backgroundColor: "#f8f9fa", // Cor de fundo clara
   },
   header: {
     backgroundColor: "#343a40",
     color: "#ffffff",
     fontSize: "24px",
-    padding: "20px", // Reduzido para um espaçamento mais adequado
+    padding: "10px",
     textAlign: "center" as const,
+    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)", // Sombra leve para o cabeçalho
   },
   main: {
-    flex: 1, // Faz o conteúdo ocupar o espaço restante
-    padding: "150px", // Ajustado para um espaçamento mais adequado
-    backgroundColor: "#f8f9fa",
-    color: "#212529",
-    fontSize: "18px",
+    flex: 1, // Faz o conteúdo principal ocupar o espaço restante
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: "20px",
   },
-
-  globalDiv: {
-    padding: "300px", // Padding aplicado a todos os <div> dentro do layout
+  content: {
+    width: "100%",
+    maxWidth: "800px", // Limita a largura máxima do conteúdo
+    padding: "20px",
+    backgroundColor: "#ffffff", // Fundo branco para destacar o conteúdo
+    borderRadius: "8px", // Bordas arredondadas
+    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", // Sombra leve
   },
-
-
   footer: {
-    backgroundColor: "#f8f9fa",
-    color: "#6c757d",
+    backgroundColor: "#343a40",
+    color: "#ffffff",
     textAlign: "center" as const,
-    padding: "10px", // Reduzido para evitar excesso de espaço
+    padding: "10px",
+    marginTop: "auto", // Garante que o rodapé fique na parte inferior
   },
 };
 

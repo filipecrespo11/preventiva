@@ -4,7 +4,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useRouter, Stack } from "expo-router";
 import { useAuth } from "./context/AuthContext";
-
+import Layout from "./componente/layout";
 
 const LoginScreen = () => {
   const { setToken } = useAuth(); // Obtém o setToken do contexto
@@ -37,7 +37,7 @@ const LoginScreen = () => {
   };
 
   return (
-
+<Layout>
     <View>
       <Stack.Screen options={{ title: "Login" }} />
 
@@ -50,7 +50,7 @@ const LoginScreen = () => {
           height: 40,
           borderColor: "gray",
           borderWidth: 1,
-          width: "80%",
+          width: "100%",
           marginBottom: 10,
           paddingHorizontal: 10,
         }}
@@ -63,7 +63,7 @@ const LoginScreen = () => {
           height: 40,
           borderColor: "gray",
           borderWidth: 1,
-          width: "80%",
+          width: "100%",
           marginBottom: 20,
           paddingHorizontal: 10,
         }}
@@ -75,6 +75,8 @@ const LoginScreen = () => {
       <Button title="Login" onPress={handleSubmit} />
     </View>
     </View>
+    </Layout>
+
   );
 };
 

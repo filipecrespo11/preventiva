@@ -1,20 +1,16 @@
 import { Text, View } from "react-native";
 import { Link, Stack } from "expo-router";
-
+import Layout from "../componente/layout";
 export default function Index() {
   return (
+    <Layout>
     <View>
+
       <Stack.Screen options={{ title: "Manutenção Preventiva" }} />
   
     <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "#fff",
-        padding: 300,
-      }}
-    >
+  
+         >
       
       <Link href="/login">
         <Text style={{ fontSize: 24, marginBottom: 20 }}>Login</Text>
@@ -39,6 +35,6 @@ export default function Index() {
     </View>
     
     </View>
-    
+    </Layout>
   );
 }
