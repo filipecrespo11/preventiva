@@ -100,8 +100,8 @@ const CadastropcScreen = () => {
           value={criapc.estado}
           onChangeText={(value) => handleChange("estado", value)}
         />
-        <Button title="Cadastrar" onPress={handleSubmit} />
-        <Button title="Voltar" onPress={() => router.push("/tabs/menu")} />
+        <Button title="Cadastrar" onPress={handleSubmit} color="rgb(4 155 92)" />
+        <Button title="Voltar" onPress={() => router.push("/tabs/menu")} color="rgb(4 155 92)" />
       </View>
     </Layout>
   );

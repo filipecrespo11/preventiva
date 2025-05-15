@@ -5,6 +5,7 @@ import { useRouter, Stack } from "expo-router";
 import { useAuth } from "./context/AuthContext";
 import Layout from "./componente/layout";
 import styles from "./componente/layoutStyles";
+import { StackRouter } from "@react-navigation/native";
 
 interface Computador {
   _id: string;
@@ -45,41 +46,28 @@ const ListComputadores: React.FC = () => {
 
   const renderItem = ({ item }: { item: Computador }) => (
     <View style={{...styles.containerlist}}>
-      <Text style={{...styles.label}}>ID:</Text>
-      <Text>{item._id}</Text>
-      <Text style={{...styles.label}}>Nome:</Text>
-      <Text>{item.nome_computador}</Text>
-      <Text style={{...styles.label}}>Fabricante:</Text>
-      <Text>{item.fabricante}</Text>
-      <Text style={{...styles.label}}>Modelo:</Text>
-      <Text>{item.modelo}</Text>
-      <Text style={{...styles.label}}>Service Tag:</Text>
-      <Text>{item.serviceTag}</Text>
-      <Text style={{...styles.label}}>Patrimônio:</Text>
-      <Text>{item.patrimonio}</Text>
-      <Text style={{...styles.label}}>Unidade:</Text>
-      <Text>{item.unidade}</Text>
-      <Text style={{...styles.label}}>Setor:</Text>
-      <Text>{item.setor}</Text>
-      <Text style={{...styles.label}}>Estado:</Text>
-      <Text>{item.estado}</Text>
+      <Text style={{...styles.label}}>ID: {item._id}</Text>
+     
+      <Text style={{...styles.label}}>Nome: {item.nome_computador}</Text>
+      
+      <Text style={{...styles.label}}>Fabricante: {item.fabricante}</Text>
+      <Text style={{...styles.label}}>Modelo: {item.modelo}</Text>
+      <Text style={{...styles.label}}>Service Tag: {item.serviceTag}</Text>
+      <Text style={{...styles.label}}>Patrimônio: {item.patrimonio}</Text>
+      <Text style={{...styles.label}}>Unidade: {item.unidade}</Text>
+      <Text style={{...styles.label}}>Setor: {item.setor}</Text>
+      <Text style={{...styles.label}}>Estado: {item.estado}</Text>
     </View>
   );
 
   return (
-    <SafeAreaView style={{...styles.safeArealist}}>
-      <Layout>
-        <View style={{...styles.containerlist}}>
-          <Stack.Screen options={{ title: "Lista de Computadores" }} />
-          <Text style={{...styles.title}}>Lista de Computadores</Text>
-          <FlatList
-            data={computadores}
-            keyExtractor={(item) => item._id}
-            renderItem={renderItem}
-            contentContainerStyle={{...styles.list}}
-          />
-        </View>
-      </Layout>
+    <SafeAreaView style={{...styles.containerlist}}>
+      <Stack.Screen options={{ title: "Lista de computadores" }} />
+      <FlatList
+        data={computadores} // The array of items to render
+        renderItem={renderItem} // The function to render each item
+        keyExtractor={(item) => item._id} // Unique key for each item
+      />
     </SafeAreaView>
   );
 };

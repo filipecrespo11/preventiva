@@ -1,14 +1,16 @@
 const styles = {
 
+    
+
     container: {
       display: "flex",
       flexDirection: "column" as const,
-      minHeight: "100vh", // Garante que o layout ocupe toda a altura da janela
-      backgroundColor: "#f8f9fa", // Cor de fundo clara
+      minHeight: "90vh", // Garante que o layout ocupe toda a altura da janela
+      backgroundColor: "#ffffff", // Cor de fundo clara
     },
     
     header: {
-      backgroundColor: "#343a40",
+      backgroundColor: "rgb(4 155 92)",
       color: "#ffffff",
       fontSize: "24px",
       padding: "10px",
@@ -33,7 +35,7 @@ const styles = {
       padding: "20px",
       backgroundColor: "#ffffff", // Fundo branco para destacar o conteúdo
       borderRadius: "8px", // Bordas arredondadas
-      boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", // Sombra leve
+      boxShadow: "0 4px 6px rgb(4 155 92)", // Sombra leve
     },
   
   input: {
@@ -56,8 +58,12 @@ const styles = {
 //lista 
 
     label: {
-        
+        padding: 15,
         color: "#343a40",
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        backgroundColor: "#ffffff",
+        marginBottom: 10,
       },
 
       item: {
@@ -87,6 +93,24 @@ const styles = {
       containerlist: {
         flex: 1,
         padding: 20,
+      },
+
+      //menu
+
+      containermenu: {
+        padding: 20,
+      },
+
+      button: {
+        backgroundColor: "rgb(4 155 92)",
+        padding: 15,
+        
+        marginBottom: 10,
+        
+      },
+      buttonText: {
+        color: "#fff",
+       
       },
 
   };

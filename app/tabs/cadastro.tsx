@@ -53,11 +53,13 @@ const CadastroScreen = () => {
         <TextInput
           style={{...styles.input}}
           placeholder="Senha"
+          secureTextEntry
           value={user.password}
+         
           onChangeText={(value)=> handleChange("password", value)}
         />
          <br/>
-        <Button title="Cadastrar" onPress={handleSubmit}/>
+        <Button title="Cadastrar" onPress={handleSubmit} color="rgb(4 155 92)" />
         
       </View>
     </View>

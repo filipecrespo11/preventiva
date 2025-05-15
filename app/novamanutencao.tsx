@@ -162,8 +162,8 @@ const NManutencao = () => {
         />
           <br/>
           </View> 
-        <Button title= "Cadastrar"/>
-        <Button title="Voltar" onPress={() => router.push("/tabs/menu")} />
+        <Button color="rgb(4 155 92)" title= "Cadastrar" />
+        <Button color="rgb(4 155 92)" title="Voltar" onPress={() => router.push("/tabs/menu")} />
         
     </View>
     </Layout>

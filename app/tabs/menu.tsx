@@ -1,40 +1,44 @@
-import { Text, View } from "react-native";
-import { Link, Stack } from "expo-router";
+import { Text, View, Button, TouchableOpacity } from "react-native";
+import { Link, Stack, useRouter} from "expo-router";
 import Layout from "../componente/layout";
+import styles from "../componente/layoutStyles";
+
 export default function Index() {
+  
+  const router = useRouter();
+  
+  
   return (
     <Layout>
-    <View>
+      <View>
+        <Stack.Screen options={{ title: "Manutenção Preventiva" }} />
 
-      <Stack.Screen options={{ title: "Manutenção Preventiva" }} />
-  
-    <View
-  
-         >
-      
-      <Link href="/login">
-        <Text style={{ fontSize: 24, marginBottom: 20 }}>Login</Text>
-      </Link>
-      <Link href="/tabs/cadastro">
-        <Text style={{ fontSize: 24, marginBottom: 20 }}>Cadastro de usuarios</Text>
-      </Link>
-      <Link href="/cadastrapc">
-      <Text style={{ fontSize: 24, marginBottom: 20 }}>Cadastro de Computador</Text>
-      </Link>
-        <Link href="/novamanutencao">
-        <Text style={{ fontSize: 24, marginBottom: 20 }}>Nova de Manutenção</Text>
-      </Link>
-      <Link href="/tabs/listapreventiva">
-        <Text style={{ fontSize: 24, marginBottom: 20 }}>Lista de Manutenção</Text>
-      </Link>
-      <Link href="/listcomp">
-        <Text style={{ fontSize: 24, marginBottom: 20 }}>Lista de Computadorers</Text>
-      </Link>
-      
-      
-    </View>
-    
-    </View>
+        <View style={{...styles.containermenu}}>
+          <TouchableOpacity style={{...styles.button}} onPress={() => router.push("/login")}>
+            <Text style={styles.buttonText}>Login</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={{...styles.button}} onPress={() => router.push("/tabs/cadastro")}>
+            <Text style={styles.buttonText}>Cadastro de Usuários</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={{...styles.button}} onPress={() => router.push("/cadastrapc")}>
+            <Text style={styles.buttonText}>Cadastro de Computador</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={{...styles.button}} onPress={() => router.push("/novamanutencao")}>
+            <Text style={styles.buttonText}>Nova Manutenção</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={{...styles.button}} onPress={() => router.push("/tabs/listapreventiva")}>
+            <Text style={styles.buttonText}>Lista de Manutenção</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={{...styles.button}} onPress={() => router.push("/listcomp")}>
+            <Text style={styles.buttonText}>Lista de Computadores</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     </Layout>
   );
 }

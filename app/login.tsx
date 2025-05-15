@@ -5,6 +5,7 @@ import axios from "axios";
 import { useRouter, Stack } from "expo-router";
 import { useAuth } from "./context/AuthContext";
 import Layout from "./componente/layout";
+import styles from "./componente/layoutStyles";
 
 const LoginScreen = () => {
   const { setToken } = useAuth(); // Obtém o setToken do contexto
@@ -72,7 +73,7 @@ const LoginScreen = () => {
         value={user.password}
         onChangeText={(value) => handleChange("password", value)}
       />
-      <Button title="Login" onPress={handleSubmit} />
+      <Button title="Login" onPress={handleSubmit} color="rgb(4 155 92)" />
     </View>
     </View>
     </Layout>
