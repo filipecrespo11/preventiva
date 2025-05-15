@@ -5,6 +5,8 @@ import { useAuth } from "./context/AuthContext";
 import { Picker } from "@react-native-picker/picker";
 import { jwtDecode } from "jwt-decode";
 import Layout from "./componente/layout"; 
+import { TextInput, View, Button } from "react-native";
+import styles from "./componente/layoutStyles";
 
 interface DecodedToken {
     id: string; // Certifique-se de que o campo corresponde ao ID do usuário no token
@@ -72,9 +74,8 @@ const NManutencao = () => {
     setUser({ ...criamanu, [name]: value });
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    try {
+  const handleSubmit = async () => {
+        try {
       await axios.post(
         "http://localhost:3000/manurota/criamanutencao",
         criamanu,
@@ -93,12 +94,12 @@ const NManutencao = () => {
   return (
     <Layout>
     
-    <div>   
+    <View>   
     
       <p>Usuário logado: {nomeUsuario}
 
       </p>
-      <form onSubmit={handleSubmit}>
+      <View>
       {/* Picker para selecionar o computador */}
       <Picker
           selectedValue={criamanu.id_computador}
@@ -109,60 +110,62 @@ const NManutencao = () => {
             <Picker.Item key={computador._id} label={computador.serviceTag} value={computador._id} />
           ))}
         </Picker> 
-        <input
-          type="text"
-          name="id_usuario"
+        <br/>
+        <TextInput
+          style={{...styles.input}}
           placeholder="Id do usuario"      
           value={criamanu.id_usuarios}
-          onChange={(e) => handleChange("id_usuario", e.target.value)}
+          onChangeText={(value) => handleChange("id_usuarios", value)}
        
         />
-        <input
-          type="text"
-          name="chamado"
+         <br/>
+        <TextInput
+           style={{...styles.input}}
           placeholder="Chamado"  
           value={criamanu.chamado}
-          onChange={(e) => handleChange("chamado", e.target.value)}
+          onChangeText={(value) => handleChange("chamado", value)}
         />
-        <input
-          type="text"
-          name="status_manutencao"
+         <br/>
+        <TextInput
+          style={{...styles.input}}
           placeholder="Status da manutenção"      
           value={criamanu.status_manutencao}
-          onChange={(e) => handleChange("status_manutencao", e.target.value)}
+          onChangeText={(value) => handleChange("status_manutencao", value)}
         />
-        <input
-          type="text"
-          name="data_manutencao_anterior"
+         <br/>
+        <TextInput
+           style={{...styles.input}}
           placeholder="Data da manutenção anterior"  
           value={criamanu.data_manutencao_anterior}
-          onChange={(e) => handleChange("data_manutencao_anterior", e.target.value)}
+          onChangeText={(value) => handleChange("data_manutencao_anterior", value)}
         />
-        <input
-          type="text"
-          name="data_manutencao"
+         <br/>
+        <TextInput
+           style={{...styles.input}}
           placeholder="Data da manutenção"  
           value={criamanu.data_manutencao}
-          onChange={(e) => handleChange("data_manutencao", e.target.value)}
+          onChangeText={(value) => handleChange("data_manutencao", value)}
         />
-        <input
-          type="text"
-          name="tipo_manutencao"
+         <br/>
+        <TextInput
+           style={{...styles.input}}
           placeholder="Tipo de manutenção"  
           value={criamanu.tipo_manutencao}
-          onChange={(e) => handleChange("tipo_manutencao", e.target.value)}
+          onChangeText={(value) => handleChange("tipo_manutencao", value)}
         />
-        <input
-          type="text"
-          name="descricao_manutencao"
+         <br/>
+        <TextInput
+           style={{...styles.input}}
           placeholder="Descrição da manutenção"  
           value={criamanu.descricao_manutencao}
-          onChange={(e) => handleChange("descricao_manutencao", e.target.value)}
+          onChangeText={(value) => handleChange("descricao_manutencao", value)}
         />
-        <button type="submit">Cadastrar</button>
-        </form> 
-        <button onClick={() => router.push("/tabs/menu")}>Voltar</button>
-    </div>
+          <br/>
+          </View> 
+        <Button title= "Cadastrar"/>
+        <Button title="Voltar" onPress={() => router.push("/tabs/menu")} />
+        
+    </View>
     </Layout>
   );
 }

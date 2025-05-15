@@ -3,6 +3,8 @@ import axios from "axios";
 import { useRouter, Stack } from "expo-router";
 import { useAuth } from "./context/AuthContext"; // Importa o contexto de autenticação
 import Layout from "./componente/layout";
+import styles from "./componente/layoutStyles";
+import { Button, TextInput, View, Text, StyleSheet } from "react-native";
 
 const CadastropcScreen = () => {
   const { token } = useAuth(); // Obtém o token do contexto
@@ -19,106 +21,92 @@ const CadastropcScreen = () => {
 
   const router = useRouter();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+  const handleChange = (name: string, value: string) => {
     setUser({ ...criapc, [name]: value });
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if(!token) {
+  const handleSubmit = async () => {
+    if (!token) {
       console.error("Token não encontrado. Certifique-se de que o usuário está autenticado.");
       return;
     }
 
-
     try {
-      
-      await axios.post("http://localhost:3000/compurota/criacomputador", criapc,
+      await axios.post(
+        "http://localhost:3000/compurota/criacomputador",
+        criapc,
         {
           headers: {
             Authorization: `Bearer ${token}`, // Inclui o token no cabeçalho
           },
         }
-
       );
-      router.push("/tabs/menu"); // Redirect to login page after successful registration
-
+      router.push("/tabs/menu"); // Redireciona para o menu após o cadastro
     } catch (error) {
-      console.error("Error creating user:", error);
+      console.error("Erro ao criar computador:", error);
     }
   };
 
   return (
     <Layout>
-    <div>
-      <Stack.Screen options={{ title: "Cadastro de Maquina" }} />
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="nome_computador"
+      <View >
+        <Stack.Screen options={{ title: "Cadastro de Máquina" }} />
+        <TextInput
+          style={{...styles.input}}
           placeholder="Nome do computador"
           value={criapc.nome_computador}
-          onChange={handleChange}
+          onChangeText={(value) => handleChange("nome_computador", value)}
         />
-        <input
-          type="text"
-          name="fabricante"
-          placeholder="Fabricante"      
+        <TextInput
+          style={{...styles.input}}
+          placeholder="Fabricante"
           value={criapc.fabricante}
-          onChange={handleChange}   
+          onChangeText={(value) => handleChange("fabricante", value)}
         />
-        <input
-          type="text"
-          name="modelo"
-          placeholder="Modelo"  
+        <TextInput
+          style={{...styles.input}}
+          placeholder="Modelo"
           value={criapc.modelo}
-          onChange={handleChange}
+          onChangeText={(value) => handleChange("modelo", value)}
         />
-        <input
-          type="text"
-          name="serviceTag"
-          placeholder="Service Tag"  
+        <TextInput
+          style={{...styles.input}}
+          placeholder="Service Tag"
           value={criapc.serviceTag}
-          onChange={handleChange}
+          onChangeText={(value) => handleChange("serviceTag", value)}
         />
-        <input
-          type="number"
-          name="patrimonio"
-          placeholder="Patrimonio"  
+        <TextInput
+          style={{...styles.input}}
+          placeholder="Patrimônio"
           value={criapc.patrimonio}
-          onChange={handleChange}
+          keyboardType="numeric"
+          onChangeText={(value) => handleChange("patrimonio", value)}
         />
-        <input
-          type="text"
-          name="unidade"
-          placeholder="Unidade"  
+        <TextInput
+          style={{...styles.input}}
+          placeholder="Unidade"
           value={criapc.unidade}
-          onChange={handleChange}
+          onChangeText={(value) => handleChange("unidade", value)}
         />
-        <input
-          type="text"
-          name="setor"
-          placeholder="Setor"  
+        <TextInput
+          style={{...styles.input}}
+          placeholder="Setor"
           value={criapc.setor}
-          onChange={handleChange}   
+          onChangeText={(value) => handleChange("setor", value)}
         />
-        <input
-          type="text"
-          name="estado"
-          placeholder="Estado"  
+        <TextInput
+          style={{...styles.input}}
+          placeholder="Estado"
           value={criapc.estado}
-          onChange={handleChange}
-          />
-          <button type="submit">Cadastrar</button>
-        
-        <button type="button" onClick={() => router.push("/tabs/menu")}>Voltar</button> 
-        </form>
-      </div>
-      </Layout>
-      
-    );
-  };
-  
-  export default CadastropcScreen;
+          onChangeText={(value) => handleChange("estado", value)}
+        />
+        <Button title="Cadastrar" onPress={handleSubmit} />
+        <Button title="Voltar" onPress={() => router.push("/tabs/menu")} />
+      </View>
+    </Layout>
+  );
+};
+
+
+
+export default CadastropcScreen;
