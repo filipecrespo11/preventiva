@@ -36,6 +36,15 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "b49666a8-fb29-4127-8521-65d472f7593d"
+      }
+    },
+    "owner": "filipecrespo"
   }
 }

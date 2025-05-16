@@ -15,7 +15,7 @@ export default function Index() {
 
         <View style={{...styles.containermenu}}>
           <TouchableOpacity style={{...styles.button}} onPress={() => router.push("/login")}>
-            <Text style={styles.buttonText}>Login</Text>
+            <Text style={styles.buttonText}>Trocar Usuario</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={{...styles.button}} onPress={() => router.push("/tabs/cadastro")}>
