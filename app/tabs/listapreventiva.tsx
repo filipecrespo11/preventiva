@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, StyleSheet, SafeAreaView } from "react-native";
+import { View, Text, FlatList, SafeAreaView } from "react-native";
 import axios from "axios";
 import { useRouter, Stack } from "expo-router";
 import { useAuth } from "../context/AuthContext";
@@ -9,7 +9,7 @@ import styles from "../componente/layoutStyles";
 interface Manutencao {
     
     id_computador: string;
-    sevicetag: string;
+    serviceTag: string;
     id_usuarios: string;
     chamado: string;
     status_manutencao: string;
@@ -45,10 +45,13 @@ const ListMautencao: React.FC = () => {
     }
   }, [token]);
 
+
+  
+
   const renderItem = ({ item }: { item: Manutencao }) => (
     <View style={{...styles.containerlist}}>
       <Text style={{...styles.label}}>ID: do computador: {item.id_computador}</Text>
-      <Text style={{...styles.label}}>Service Tag: {item.sevicetag}</Text>
+      <Text style={{...styles.label}}>Service Tag: {item.serviceTag}</Text>
       <Text style={{...styles.label}}>ID do Usuário: {item.id_usuarios}</Text>
       <Text style={{...styles.label}}>Chamado: {item.chamado}</Text>
       <Text style={{...styles.label}}>Status da Manutenção: {item.status_manutencao}</Text>

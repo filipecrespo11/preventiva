@@ -43,8 +43,8 @@ const styles = {
     borderColor: "#ccc",
     borderWidth: 1,
     borderRadius: 5,
-    marginBottom: 10,
     paddingHorizontal: 10,
+    marginBottom: 20
   },
     
     footer: {
