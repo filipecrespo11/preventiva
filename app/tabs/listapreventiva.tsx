@@ -73,7 +73,7 @@ const ListMautencao: React.FC = () => {
 
   return (
     <SafeAreaView style={{...styles.containerlist}}>
-      <Stack.Screen options={{ title: "Lista de computadores" }} />
+      <Stack.Screen options={{ title: "Lista de Manutenções" }} />
       <FlatList
         data={Manutencao} // The array of items to render
         renderItem={renderItem} // The function to render each item

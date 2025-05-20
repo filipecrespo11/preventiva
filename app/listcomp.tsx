@@ -46,10 +46,8 @@ const ListComputadores: React.FC = () => {
 
   const renderItem = ({ item }: { item: Computador }) => (
     <View style={{...styles.containerlist}}>
-      <Text style={{...styles.label}}>ID: {item._id}</Text>
-     
-      <Text style={{...styles.label}}>Nome: {item.nome_computador}</Text>
-      
+      <Text style={{...styles.label}}>ID: {item._id}</Text>     
+      <Text style={{...styles.label}}>Nome: {item.nome_computador}</Text>      
       <Text style={{...styles.label}}>Fabricante: {item.fabricante}</Text>
       <Text style={{...styles.label}}>Modelo: {item.modelo}</Text>
       <Text style={{...styles.label}}>Service Tag: {item.serviceTag}</Text>

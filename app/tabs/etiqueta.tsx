@@ -111,20 +111,31 @@ const EtiquetaScreen: React.FC = () => {
       Alert.alert("Erro", "Nenhum item selecionado para impressão.");
       return;
     }
-
+  
+    if (!etiquetaRef.current) {
+      console.error("etiquetaRef está vazio ou não atribuído.");
+      Alert.alert("Erro", "Não foi possível capturar a etiqueta.");
+      return;
+    }
+  
     try {
-      const uri = await captureRef(etiquetaRef, {
+      console.log("Capturando a etiqueta...");
+      const uri = await captureRef(etiquetaRef.current, {
         format: "png",
         quality: 1,
       });
-
+  
+      console.log("Etiqueta capturada com sucesso:", uri);
+  
       if (await Sharing.isAvailableAsync()) {
         await Sharing.shareAsync(uri);
       } else {
         console.log("Compartilhamento não disponível.");
+        Alert.alert("Compartilhamento não disponível no dispositivo.");
       }
     } catch (error) {
       console.error("Erro ao capturar a etiqueta:", error);
+      Alert.alert("Erro", "Ocorreu um erro ao capturar a etiqueta.");
     }
   };
 
@@ -143,7 +154,7 @@ const EtiquetaScreen: React.FC = () => {
       {itemSelecionado && (
         <View ref={etiquetaRef} style={styles.etiquetas}>
           <Text style={styles.title}>Etiqueta do Computador</Text>
-          <QRCode value={itemSelecionado.serviceTag} size={100} />
+          <QRCode value={itemSelecionado.serviceTag} size={90} />
           <Text style={styles.info}>Nome: {itemSelecionado.nome_computador}</Text>
           <Text style={styles.info}>Fabricante: {itemSelecionado.fabricante}</Text>
           <Text style={styles.info}>Modelo: {itemSelecionado.modelo}</Text>
