@@ -1,11 +1,11 @@
 import React from "react";
-import { View, Text, TextInput, Button, Alert } from "react-native";
+import { View, Text, TextInput, Button, Alert, Platform } from "react-native";
 import { useState } from "react";
 import axios from "axios";
 import { useRouter, Stack } from "expo-router";
 import { useAuth } from "./context/AuthContext";
 import Layout from "./componente/layout";
-import styles from "./componente/layoutStyles";
+
 
 const LoginScreen = () => {
   const { setToken } = useAuth(); // Obtém o setToken do contexto
@@ -27,15 +27,20 @@ const LoginScreen = () => {
       const response = await axios.post("http://localhost:3000/auterota/login", user);
       if (response.status === 200) {
         console.log("Login successful"), Alert.alert("Login bem-sucedido!");
+      
+          window.alert("Login bem-sucedido!");
+        
         
                 setToken(response.data.token); // Armazena o token no contexto
         router.push("/tabs/menu");
       } else {
-        console.log("Login failed"),
-        Alert.alert("Login falhou", "Verifique suas credenciais e tente novamente.");
+        console.log("Login failed");
+        
+        window.alert("Login falhou.");
       }
     } catch (error) {
       console.error("Error logging in:", error);
+      window.alert("Erro ao fazer login.");
     }
   };
 

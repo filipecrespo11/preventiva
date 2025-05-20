@@ -39,7 +39,7 @@ const EtiquetaScreen: React.FC = () => {
         setComputadores(response.data);
       } catch (error) {
         console.error("Erro ao buscar computadores:", error);
-        Alert.alert("Erro", "Não foi possível carregar a lista de computadores.");
+        window.alert("Erro Não foi possível carregar a lista de computadores.");
       }
     };
 
@@ -101,20 +101,20 @@ const EtiquetaScreen: React.FC = () => {
     if (encontrado) {
       setItemSelecionado(encontrado);
     } else {
-      Alert.alert("Erro", "Nenhum item encontrado com essa Service Tag.");
+      window.alert( "Nenhum item encontrado com essa Service Tag.");
       setItemSelecionado(null);
     }
   };
 
   const handlePrint = async () => {
     if (!itemSelecionado) {
-      Alert.alert("Erro", "Nenhum item selecionado para impressão.");
+      window.alert("Erro Nenhum item selecionado para impressão.");
       return;
     }
   
     if (!etiquetaRef.current) {
       console.error("etiquetaRef está vazio ou não atribuído.");
-      Alert.alert("Erro", "Não foi possível capturar a etiqueta.");
+      window.alert("Erro Não foi possível capturar a etiqueta.");
       return;
     }
   
@@ -126,16 +126,18 @@ const EtiquetaScreen: React.FC = () => {
       });
   
       console.log("Etiqueta capturada com sucesso:", uri);
+      window.alert("Etiqueta capturada com sucesso.");
   
+      console.log("Compartilhando a etiqueta...");
       if (await Sharing.isAvailableAsync()) {
         await Sharing.shareAsync(uri);
       } else {
         console.log("Compartilhamento não disponível.");
-        Alert.alert("Compartilhamento não disponível no dispositivo.");
+        window.alert("Compartilhamento não disponível no dispositivo.");
       }
     } catch (error) {
       console.error("Erro ao capturar a etiqueta:", error);
-      Alert.alert("Erro", "Ocorreu um erro ao capturar a etiqueta.");
+      window.alert("Erro Ocorreu um erro ao capturar a etiqueta.");
     }
   };
 
