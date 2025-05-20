@@ -1,5 +1,5 @@
-import { Text, View, Button, TouchableOpacity } from "react-native";
-import { Link, Stack, useRouter} from "expo-router";
+import { Text, View, TouchableOpacity } from "react-native";
+import { Stack, useRouter} from "expo-router";
 import Layout from "../componente/layout";
 import styles from "../componente/layoutStyles";
 
@@ -36,6 +36,10 @@ export default function Index() {
 
           <TouchableOpacity style={{...styles.button}} onPress={() => router.push("/listcomp")}>
             <Text style={styles.buttonText}>Lista de Computadores</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={{...styles.button}}  onPress={() => router.push("/tabs/etiqueta")}>
+            <Text style={styles.buttonText}>Gerar Etiqueta</Text>
           </TouchableOpacity>
         </View>
       </View>

@@ -113,6 +113,24 @@ const styles = {
        
       },
 
+      //etiqueta
+      etiquetas: {
+        width: 200,
+        height: 100,
+        backgroundColor: "#fff",
+        
+        
+        borderWidth: 1,
+       
+        marginBottom: 20,
+      },
+
+      info: {
+        fontSize: 14,
+        marginTop: 5,
+      },
+
+
   };
 
   
