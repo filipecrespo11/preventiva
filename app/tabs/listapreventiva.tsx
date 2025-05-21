@@ -28,11 +28,11 @@ const ListMautencao: React.FC = () => {
     // Função para buscar a lista de computadores
     const fetchManutecao = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/manurota/manutencoes")
-         setManutencao(response.data); // Supondo que o backend retorne uma lista de computadores
+        const response = await axios.get("http://localhost:3000/manurota/manutencoes");
+        setManutencao(response.data); // Supondo que o backend retorne uma lista de computadores
       } catch (error) {
         console.error("Erro ao buscar Manuteções:", error);
-      }
+      };
     };
 
  

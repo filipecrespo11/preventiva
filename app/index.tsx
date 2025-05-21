@@ -22,6 +22,10 @@ export default function Index() {
             <Text style={styles.buttonText}>Lista de Manutenção</Text>
           </TouchableOpacity>
 
+          <TouchableOpacity style={{...styles.button}}  onPress={() => router.push("/tabs/calendario")}>
+            <Text style={styles.buttonText}>Calendario</Text>
+          </TouchableOpacity>
+
         </View>
       </View>
     </Layout>

@@ -5,6 +5,7 @@ import { useAuth } from "./context/AuthContext"; // Importa o contexto de autent
 import Layout from "./componente/layout";
 import styles from "./componente/layoutStyles";
 import { Button, TextInput, View, Text, StyleSheet } from "react-native";
+import { Picker } from "@react-native-picker/picker"; // Importa o componente Picker
 
 const CadastropcScreen = () => {
   const { token } = useAuth(); // Obtém o token do contexto
@@ -18,6 +19,16 @@ const CadastropcScreen = () => {
     setor: "",
     estado: "",
   });
+
+  const [unidades] = useState<string[]>(["Hospital", "Operadora"]); // Lista de unidades
+  const [setores] = useState<{ [key: string]: string[] }>({
+    Hospital: ["TI", "Posto A", "Posto B"],
+    Operadora: ["Administração", "Financeiro", "RH"],
+  }); // Setores por unidade
+  const [selectedUnidade, setSelectedUnidade] = useState<string>(""); // Unidade selecionada
+  const [selectedSetor, setSelectedSetor] = useState<string>(""); // Setor selecionado
+
+
 
   const router = useRouter();
 
@@ -82,18 +93,38 @@ const CadastropcScreen = () => {
           keyboardType="numeric"
           onChangeText={(value) => handleChange("patrimonio", value)}
         />
-        <TextInput
+          {/* Picker para Unidade */}
+          
+        <Picker
+          selectedValue={selectedUnidade}
+          onValueChange={(value) => {
+            setSelectedUnidade(value);
+            setSelectedSetor(""); // Reseta o setor ao mudar a unidade
+          }}
           style={{...styles.input}}
-          placeholder="Unidade"
-          value={criapc.unidade}
-          onChangeText={(value) => handleChange("unidade", value)}
-        />
-        <TextInput
-          style={{...styles.input}}
-          placeholder="Setor"
-          value={criapc.setor}
-          onChangeText={(value) => handleChange("setor", value)}
-        />
+        >
+          <Picker.Item label="Selecione a Unidade" value="" />
+          {unidades.map((unidade) => (
+            <Picker.Item key={unidade} label={unidade} value={unidade} />
+          ))}
+        </Picker>
+
+        {/* Picker para Setor */}
+        {selectedUnidade && (
+          <>
+            <Picker
+              selectedValue={selectedSetor}
+              onValueChange={(value) => setSelectedSetor(value)}
+              style={{...styles.input}}
+            >
+              <Picker.Item label="Selecione o Setor" value="" />
+              {setores[selectedUnidade]?.map((setor) => (
+                <Picker.Item key={setor} label={setor} value={setor} />
+              ))}
+            </Picker>
+          </>
+        )}
+        
         <TextInput
           style={{...styles.input}}
           placeholder="Estado"
