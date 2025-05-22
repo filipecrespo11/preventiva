@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, SafeAreaView, Alert } from "react-native";
+import { View, Text, SafeAreaView, Alert, Platform } from "react-native";
 import axios from "axios";
-import { Agenda } from "react-native-calendars";
+import { Agenda, AgendaList } from "react-native-calendars";
+import { enableScreens} from "react-native-screens";
+import Layout from "../componente/layout";
+
 
 interface Manutencao {
   id_computador: string;
@@ -26,7 +29,7 @@ const AgendaManutencao: React.FC = () => {
         const response = await axios.get("http://localhost:3000/manurota/manutencoes");
         const data = response.data;
 
-        const hoje = new Date();
+        const hoje = new Date(data[0].data_manutencao); // Data atual
         const umAnoDepois = new Date();
         umAnoDepois.setFullYear(hoje.getFullYear() + 1);
 
@@ -59,32 +62,53 @@ const AgendaManutencao: React.FC = () => {
     fetchManutencoes();
   }, []);
 
+
+// Desativar o uso do Native Driver no ambiente web
+if (Platform.OS === "web") {
+  enableScreens(false);
+}
+
   return (
+
+
+
+
+
     <SafeAreaView >
-      <Text >Agenda de Manutenções</Text>
+      <Layout>
+      
+
+    <View >
       <Agenda
         items={agendaItems}
-        renderItem={(item: AgendaItem, firstItemInDay: boolean) => (
+
+        renderItem={(item: AgendaItem) => (
           <View >
             <Text >{item.name}</Text>
             <Text >{item.description}</Text>
             <Text>Service Tag: {item.serviceTag}</Text>
           </View>
         )}
+        
         renderEmptyDate={() => (
           <View >
             <Text >Nenhuma manutenção para esta data.</Text>
           </View>
         )}
-        pastScrollRange={6}
-        futureScrollRange={6}
+        disabledByDefault={true}
+        refreshControl={null}
+        pastScrollRange={12}
+        futureScrollRange={12}
         theme={{
           agendaDayTextColor: "black",
           agendaDayNumColor: "black",
           agendaTodayColor: "blue",
           agendaKnobColor: "blue",
         }}
+
       />
+    </View>
+    </Layout>
     </SafeAreaView>
   );
 };

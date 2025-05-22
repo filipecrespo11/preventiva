@@ -5,6 +5,7 @@ import { captureRef } from "react-native-view-shot";
 import * as Sharing from "expo-sharing";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
+import * as Print from "expo-print";
 
 interface Computador {
   _id: string;

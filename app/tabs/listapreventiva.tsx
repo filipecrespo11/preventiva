@@ -3,6 +3,7 @@ import { View, Text, FlatList, SafeAreaView } from "react-native";
 import axios from "axios";
 import { Stack } from "expo-router";
 import styles from "../componente/layoutStyles";
+import Layout from "../componente/layout";
 
 
 interface Manutencao {
@@ -73,12 +74,16 @@ const ListMautencao: React.FC = () => {
 
   return (
     <SafeAreaView style={{...styles.containerlist}}>
+      
       <Stack.Screen options={{ title: "Lista de Manutenções" }} />
+      
       <FlatList
+     
         data={Manutencao} // The array of items to render
         renderItem={renderItem} // The function to render each item
         keyExtractor={(item) => item.chamado} // Unique key for each item
       />
+      
     </SafeAreaView>
   );
 };

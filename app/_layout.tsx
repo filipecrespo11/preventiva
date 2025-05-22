@@ -18,9 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           },
         }}>
         <Stack.Screen name="index" options={{ title: "Pagina Inicial" }} />
-        <Stack.Screen name="novamanutencao" options={{ title: "Nova Manutenção" }} />
-        <Stack.Screen name="manutencao" options={{ title: "Manutenção" }} />
-        <Stack.Screen name="manutencaopendente" options={{ title: "Manutenção Pendente" }} />
+                
        
 </Stack>
       

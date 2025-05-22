@@ -5,6 +5,7 @@ import { useRouter, Stack } from "expo-router";
 import { useAuth } from "./context/AuthContext";
 import styles from "./componente/layoutStyles";
 import { Picker } from "@react-native-picker/picker";
+import Layout from "./componente/layout";
 
 
 
@@ -81,14 +82,8 @@ const ListComputadores: React.FC = () => {
 
   return (
     <SafeAreaView style={{...styles.containerlist}}>
-      <Stack.Screen options={{ title: "Lista de computadores" }} />
-        {/* Campo de Busca */}
-            <TextInput
-              style={styles.input}
-              placeholder="Digite a Service Tag"
-              value={serviceTag}
-              onChangeText={setServiceTag}
-            />
+      <Layout>
+      
             
       <Picker
         selectedValue={selectedUnidade}
@@ -129,6 +124,8 @@ const ListComputadores: React.FC = () => {
         renderItem={renderItem}
         keyExtractor={(item) => item._id}
       />
+
+</Layout>
     </SafeAreaView>
   );
 };
