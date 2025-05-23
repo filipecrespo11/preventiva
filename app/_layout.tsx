@@ -11,6 +11,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         screenOptions={{
               headerStyle: {
             backgroundColor: "#343a40",
+            
           },
           headerTintColor: "#fff",
           headerTitleStyle: {

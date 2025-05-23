@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, SafeAreaView, Alert, Platform } from "react-native";
 import axios from "axios";
-import { Agenda, AgendaList } from "react-native-calendars";
+import { Agenda, AgendaList, Calendar } from "react-native-calendars";
 import { enableScreens} from "react-native-screens";
 import Layout from "../componente/layout";
+import styles from "../componente/layoutStyles";
 
 
 interface Manutencao {
@@ -11,12 +12,12 @@ interface Manutencao {
   serviceTag: string;
   data_manutencao: string;
   tipo_manutencao: string;
-  descricao_manutencao: string;
+  setor: string;
 }
 
 interface AgendaItem {
-  name: string;
-  description: string;
+  tipo_manutencao: string;
+  setor: string;
   serviceTag: string;
 }
 
@@ -44,8 +45,8 @@ const AgendaManutencao: React.FC = () => {
             acc[dateKey] = [];
           }
           acc[dateKey].push({
-            name: manutencao.tipo_manutencao,
-            description: manutencao.descricao_manutencao,
+        tipo_manutencao: manutencao.tipo_manutencao,
+            setor: manutencao.setor,
             serviceTag: manutencao.serviceTag,
           });
           return acc;
@@ -68,6 +69,12 @@ if (Platform.OS === "web") {
   enableScreens(false);
 }
 
+
+const sections = Object.keys(agendaItems).map((date) => ({
+  title: date, // Use the date as the section title
+  data: agendaItems[date], // Use the array of items as the section data
+}));
+
   return (
 
 
@@ -79,24 +86,34 @@ if (Platform.OS === "web") {
       
 
     <View >
+   
+
+    
       <Agenda
         items={agendaItems}
 
         renderItem={(item: AgendaItem) => (
           <View >
-            <Text >{item.name}</Text>
-            <Text >{item.description}</Text>
-            <Text>Service Tag: {item.serviceTag}</Text>
+            <Text style={{...styles.label}}>{item.tipo_manutencao}</Text>
+            <Text style={{...styles.label}}>{item.setor}</Text>
+            <Text style={{...styles.label}}>Service Tag: {item.serviceTag}</Text>
           </View>
         )}
         
-        renderEmptyDate={() => (
+        
+        renderKnob={() => (
           <View >
-            <Text >Nenhuma manutenção para esta data.</Text>
+            <Text >Clique para ver as manutenções</Text>
           </View>
         )}
-        disabledByDefault={true}
-        refreshControl={null}
+        selected={new Date().toISOString().split("T")[0]} // Data atual
+        renderItemInfo={() => (
+          <View >
+            <Text >Clique para ver as manutenções</Text>
+          </View>
+        )}  
+
+
         pastScrollRange={12}
         futureScrollRange={12}
         theme={{

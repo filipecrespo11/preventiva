@@ -1,4 +1,4 @@
-import { FlatList } from "react-native";
+
 
 const styles = {
 
@@ -21,7 +21,7 @@ const styles = {
     },
     body: {
       backgroundColor: "rgba(165, 56, 56, 0.74)", // Cor de fundo clara
-      display: "flex",
+      
       
     },
     main: {
@@ -29,20 +29,21 @@ const styles = {
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
-      padding: "20px",
+      padding: "50px , 50px , 50px , 50px",
+      
+      
+      
     },
     content: {
      
       width: "100%",
-      maxWidth: "80rem", // Limita a largura máxima do conteúdo
-      minWidth: "80rem", // Largura mínima para telas menores
-      minHeight: "40rem", // Altura mínima para telas menores
-      maxHeight: "70rem", // Altura máxima para telas maiores
+      maxWidth: "800px", // Limita a largura máxima do conteúdo
+      maxHeight: "700px", // Altura máxima para telas maiores
       padding: "20px",
       backgroundColor: "#ffffff", // Fundo branco para destacar o conteúdo
       borderRadius: "8px", // Bordas arredondadas
       boxShadow: "0 4px 6px rgb(4 155 92)", // Sombra leve
-      FlatList ,
+
 
     },
   
@@ -99,7 +100,7 @@ const styles = {
         backgroundColor: "#f8f9fa",
       },
       containerlist: {
-        FlatList,
+    
         flex: 1,
         padding: 20,
       },

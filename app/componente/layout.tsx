@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./layoutStyles";
 
+
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <div style={styles.container}>
@@ -10,9 +11,13 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       </header>
 
       {/* Conteúdo Principal */}
+      
       <main style={styles.main}>
+
         <div style={styles.content}>{children}</div>
+        
       </main>
+      
 
       {/* Rodapé */}
       <footer style={styles.footer}>
