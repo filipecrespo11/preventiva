@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, SafeAreaView, Alert, Platform } from "react-native";
 import axios from "axios";
-import { Agenda, AgendaList, Calendar } from "react-native-calendars";
+import { Agenda, Calendar } from "react-native-calendars";
 import { enableScreens} from "react-native-screens";
 import Layout from "../componente/layout";
 import styles from "../componente/layoutStyles";
@@ -21,111 +21,121 @@ interface AgendaItem {
   serviceTag: string;
 }
 
+type CalendarDay = {
+  dateString: string;
+  day: number;
+  month: number;
+  year: number;
+  timestamp: number;
+};
+
+// ...existing code...
 const AgendaManutencao: React.FC = () => {
-  const [agendaItems, setAgendaItems] = useState<{ [key: string]: AgendaItem[] }>({}); // Itens para o componente Agenda
+  const [agendaItems, setAgendaItems] = useState<{ [key: string]: AgendaItem[] }>({});
+  const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split("T")[0]); // Data selecionada
 
-  useEffect(() => {
-    const fetchManutencoes = async () => {
-      try {
-        const response = await axios.get("http://localhost:3000/manurota/manutencoes");
-        const data = response.data;
+ // ...existing code...
+useEffect(() => {
+  const fetchManutencoes = async () => {
+    try {
+      const response = await axios.get("http://localhost:3000/manurota/manutencoes");
+      const data = response.data;
 
-        const hoje = new Date(data[0].data_manutencao); // Data atual
-        const umAnoDepois = new Date();
-        umAnoDepois.setFullYear(hoje.getFullYear() + 1);
+      // Gera itens para a data atual e para a próxima manutenção (1 ano depois)
+      const items = data.reduce((acc: { [key: string]: AgendaItem[] }, manutencao: Manutencao) => {
+        // Data da manutenção atual
+        const dataAtual = new Date(manutencao.data_manutencao);
+        const dataAtualKey = manutencao.data_manutencao.split("T")[0];
 
-        const manutencoesFiltradas = data.filter((manutencao: Manutencao) => {
-          const dataManutencao = new Date(manutencao.data_manutencao);
-          return dataManutencao >= hoje && dataManutencao <= umAnoDepois;
+        // Próxima manutenção: 1 ano depois
+        const proximaData = new Date(dataAtual);
+        proximaData.setFullYear(proximaData.getFullYear() + 1);
+        const proximaDataKey = proximaData.toISOString().split("T")[0];
+
+        // Adiciona a manutenção atual
+        if (!acc[dataAtualKey]) acc[dataAtualKey] = [];
+        acc[dataAtualKey].push({
+          tipo_manutencao: manutencao.tipo_manutencao,
+          setor: manutencao.setor,
+          serviceTag: manutencao.serviceTag,
         });
 
-        const items = manutencoesFiltradas.reduce((acc: { [key: string]: AgendaItem[] }, manutencao: Manutencao) => {
-          const dateKey = manutencao.data_manutencao.split("T")[0]; // Formato YYYY-MM-DD
-          if (!acc[dateKey]) {
-            acc[dateKey] = [];
-          }
-          acc[dateKey].push({
-        tipo_manutencao: manutencao.tipo_manutencao,
-            setor: manutencao.setor,
-            serviceTag: manutencao.serviceTag,
-          });
-          return acc;
-        }, {});
+        // Adiciona o agendamento para o próximo ano
+        if (!acc[proximaDataKey]) acc[proximaDataKey] = [];
+        acc[proximaDataKey].push({
+          tipo_manutencao: `Próxima manutenção (${manutencao.tipo_manutencao})`,
+          setor: manutencao.setor,
+          serviceTag: manutencao.serviceTag,
+        });
 
-        console.log("Itens do calendário:", items); // Log para verificar os itens
-        setAgendaItems(items);
-      } catch (error) {
-        console.error("Erro ao buscar manutenções:", error);
-        Alert.alert("Erro", "Não foi possível carregar as manutenções. Tente novamente mais tarde.");
-      }
-    };
+        return acc;
+      }, {});
 
-    fetchManutencoes();
-  }, []);
+      setAgendaItems(items);
+    } catch (error) {
+      console.error("Erro ao buscar manutenções:", error);
+      Alert.alert("Erro", "Não foi possível carregar as manutenções. Tente novamente mais tarde.");
+    }
+  };
 
+  fetchManutencoes();
+}, []);
+// ...existing code...
 
-// Desativar o uso do Native Driver no ambiente web
-if (Platform.OS === "web") {
-  enableScreens(false);
-}
-
-
-const sections = Object.keys(agendaItems).map((date) => ({
-  title: date, // Use the date as the section title
-  data: agendaItems[date], // Use the array of items as the section data
-}));
+  if (Platform.OS === "web") {
+    enableScreens(false);
+  }
 
   return (
-
-
-
-
-
-    <SafeAreaView >
+    <SafeAreaView>
       <Layout>
-      
+        <View>
+          {/* Calendário acima da agenda */}
+          <Calendar
+            current={selectedDate}
+            onDayPress={(day: CalendarDay) => setSelectedDate(day.dateString)}
+            markedDates={{
+              [selectedDate]: { selected: true, selectedColor: "blue" },
+              // Marcar datas que têm itens
+              ...Object.keys(agendaItems).reduce((acc, date) => {
+                acc[date] = acc[date] || { marked: true };
+                return acc;
+              }, {} as any),
+            }}
+            theme={{
+              selectedDayBackgroundColor: "blue",
+              todayTextColor: "blue",
+              arrowColor: "blue",
+            }}
+          />
 
-    <View >
-   
-
-    
-      <Agenda
-        items={agendaItems}
-
-        renderItem={(item: AgendaItem) => (
-          <View >
-            <Text style={{...styles.label}}>{item.tipo_manutencao}</Text>
-            <Text style={{...styles.label}}>{item.setor}</Text>
-            <Text style={{...styles.label}}>Service Tag: {item.serviceTag}</Text>
-          </View>
-        )}
-        
-        
-        renderKnob={() => (
-          <View >
-            <Text >Clique para ver as manutenções</Text>
-          </View>
-        )}
-        selected={new Date().toISOString().split("T")[0]} // Data atual
-        renderItemInfo={() => (
-          <View >
-            <Text >Clique para ver as manutenções</Text>
-          </View>
-        )}  
-
-
-        pastScrollRange={12}
-        futureScrollRange={12}
-        theme={{
-          agendaDayTextColor: "black",
-          agendaDayNumColor: "black",
-          agendaTodayColor: "blue",
-          agendaKnobColor: "blue",
-        }}
-
-      />
-    </View>
-    </Layout>
+          <Agenda
+            items={agendaItems}
+            selected={selectedDate}
+            onDayPress={(day: CalendarDay) => setSelectedDate(day.dateString)}
+            renderItem={(item: AgendaItem) => (
+              <View>
+                <Text style={{ ...styles.label }}>{item.tipo_manutencao}</Text>
+                <Text style={{ ...styles.label }}>{item.setor}</Text>
+                <Text style={{ ...styles.label }}>Service Tag: {item.serviceTag}</Text>
+              </View>
+            )}
+            renderKnob={() => (
+              <View>
+                <Text>Clique para ver as manutenções</Text>
+              </View>
+            )}
+            pastScrollRange={12}
+            futureScrollRange={12}
+            theme={{
+              agendaDayTextColor: "black",
+              agendaDayNumColor: "black",
+              agendaTodayColor: "blue",
+              agendaKnobColor: "blue",
+            }}
+          />
+        </View>
+      </Layout>
     </SafeAreaView>
   );
 };
