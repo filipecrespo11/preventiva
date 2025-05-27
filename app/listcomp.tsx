@@ -56,71 +56,54 @@ const ListComputadores: React.FC = () => {
     }
   }, [token]);
 
-  const handleSearch = () => {
-    const encontrado = dadosCombinados.find((item) => item.serviceTag === serviceTag);
-    if (encontrado) {
-      setItemSelecionado(encontrado);
-    } else {
-      window.alert( "Nenhum item encontrado com essa Service Tag.");
-      setItemSelecionado(null);
-    }
-  };
+  const [searchTerm, setSearchTerm] = useState<string>(""); // Novo estado para pesquisa
+
+  const TableHeader = () => (
+  <View style={{ flexDirection: "row", backgroundColor: "#e0e0e0", padding: 8 }}>
+    <Text style={[styles.label, { flex: 1, fontWeight: "bold" }]}>Nome</Text>
+    <Text style={[styles.label, { flex: 1, fontWeight: "bold" }]}>Fabricante</Text>
+    <Text style={[styles.label, { flex: 1, fontWeight: "bold" }]}>Modelo</Text>
+    <Text style={[styles.label, { flex: 1, fontWeight: "bold" }]}>Service Tag</Text>
+    <Text style={[styles.label, { flex: 1, fontWeight: "bold" }]}>Patrimônio</Text>
+    <Text style={[styles.label, { flex: 1, fontWeight: "bold" }]}>Unidade</Text>
+    <Text style={[styles.label, { flex: 1, fontWeight: "bold" }]}>Setor</Text>
+    <Text style={[styles.label, { flex: 1, fontWeight: "bold" }]}>Estado</Text>
+  </View>
+);
 
   const renderItem = ({ item }: { item: Computador }) => (
-    <View style={{...styles.containerlist}}>
-      <Text style={{...styles.label}}>ID: {item._id}</Text>     
-      <Text style={{...styles.label}}>Nome: {item.nome_computador}</Text>      
-      <Text style={{...styles.label}}>Fabricante: {item.fabricante}</Text>
-      <Text style={{...styles.label}}>Modelo: {item.modelo}</Text>
-      <Text style={{...styles.label}}>Service Tag: {item.serviceTag}</Text>
-      <Text style={{...styles.label}}>Patrimônio: {item.patrimonio}</Text>
-      <Text style={{...styles.label}}>Unidade: {item.unidade}</Text>
-      <Text style={{...styles.label}}>Setor: {item.setor}</Text>
-      <Text style={{...styles.label}}>Estado: {item.estado}</Text>
-    </View>
-  );
+  <View style={{ flexDirection: "row", borderBottomWidth: 1, borderColor: "#e0e0e0", padding: 8 }}>
+    <Text style={[styles.label, { flex: 1 }]}>{item.nome_computador}</Text>
+    <Text style={[styles.label, { flex: 1 }]}>{item.fabricante}</Text>
+    <Text style={[styles.label, { flex: 1 }]}>{item.modelo}</Text>
+    <Text style={[styles.label, { flex: 1 }]}>{item.serviceTag}</Text>
+    <Text style={[styles.label, { flex: 1 }]}>{item.patrimonio}</Text>
+    <Text style={[styles.label, { flex: 1 }]}>{item.unidade}</Text>
+    <Text style={[styles.label, { flex: 1 }]}>{item.setor}</Text>
+    <Text style={[styles.label, { flex: 1 }]}>{item.estado}</Text>
+  </View>
+);
 
   return (
     <SafeAreaView style={{...styles.containerlist}}>
       <Layout>
-      
-            
-      <Picker
-        selectedValue={selectedUnidade}
-        onValueChange={(value) => {
-          setSelectedUnidade(value);
-          setSelectedSetor(""); // Reseta o setor ao mudar a unidade
-        }}
-        
-      >
-        <Picker.Item label="Selecione a Unidade" value="" />
-        {unidades.map((unidade) => (
-          <Picker.Item key={unidade} label={unidade} value={unidade} />
-        ))}
-      </Picker>
-
-      {selectedUnidade && (
-        <>
-          <Text style={styles.title}>Selecione o Setor</Text>
-          <Picker
-            selectedValue={selectedSetor}
-            onValueChange={(value) => setSelectedSetor(value)}
-           
-          >
-            <Picker.Item label="Selecione o Setor" value="" />
-            {setores[selectedUnidade]?.map((setor) => (
-              <Picker.Item key={setor} label={setor} value={setor} />
-            ))}
-          </Picker>
-        </>
-      )}
-
-<FlatList
+         <TextInput
+        style={{...styles.input}}
+        placeholder="Pesquisar por nome ou Service Tag"
+        value={searchTerm}
+        onChangeText={setSearchTerm}
+      />
+      <TableHeader />
+        <FlatList
         data={computadores.filter(
           (comp) =>
             (!selectedUnidade || comp.unidade === selectedUnidade) &&
-            (!selectedSetor || comp.setor === selectedSetor)
-        )} // Filtra os computadores pela unidade e setor selecionados
+            (!selectedSetor || comp.setor === selectedSetor) &&
+            (
+              comp.nome_computador.toLowerCase().includes(searchTerm.toLowerCase()) ||
+              comp.serviceTag.toLowerCase().includes(searchTerm.toLowerCase())
+            )
+        )} // Filtra por unidade, setor, nome ou service tag
         renderItem={renderItem}
         keyExtractor={(item) => item._id}
       />

@@ -9,6 +9,7 @@ const styles = {
       flexDirection: "column" as const,
       minHeight: "90vh", // Garante que o layout ocupe toda a altura da janela
       backgroundColor: "#ffffff", // Cor de fundo clara
+      overflow: "auto", // Permite rolagem vertical se necessário
     },
     
     header: {
@@ -30,6 +31,7 @@ const styles = {
       justifyContent: "center",
       alignItems: "center",
       padding: "50px , 50px , 50px , 50px",
+      overflow: "auto", // Permite rolagem vertical se necessário
       
       
       

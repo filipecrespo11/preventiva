@@ -2,6 +2,7 @@ import { Text, View, TouchableOpacity} from "react-native";
 import { Stack, useRouter  } from "expo-router";
 import Layout from "./componente/layout";
 import styles from "./componente/layoutStyles";
+import AgendaManutencao from "./tabs/calendario";
 
 export default function Index() {
 
@@ -9,7 +10,7 @@ export default function Index() {
     const router = useRouter();
 
   return (
-    <Layout>
+    <Layout children1={<AgendaManutencao />}>
       <View>
         <Stack.Screen options={{ title: "Manutenção Preventiva" }} />
 
@@ -27,7 +28,12 @@ export default function Index() {
           </TouchableOpacity>
 
         </View>
+        
       </View>
-    </Layout>
+
+      
+
+       </Layout>
+
   );
 }

@@ -27,6 +27,7 @@ interface DecodedToken {
 interface Computador {
   _id: string;
   serviceTag: string;
+  setor: string;
 }
 
 const NManutencao = () => {
@@ -36,6 +37,7 @@ const NManutencao = () => {
   const [criamanu, setCriamanu] = useState({
     id_computador: "",
     serviceTag: "",
+    setor: "",
     id_usuarios: "",
     chamado: "",
     status_manutencao: "",
@@ -118,6 +120,7 @@ const NManutencao = () => {
     if (
       !criamanu.id_computador ||
       !criamanu.serviceTag ||
+      !criamanu.setor ||
       !criamanu.id_usuarios ||
       !criamanu.chamado ||
       !criamanu.data_manutencao ||
@@ -157,6 +160,7 @@ const NManutencao = () => {
               const selectedComputer = computadores.find((computador) => computador._id === value);
               if (selectedComputer) {
                 handleChange("serviceTag", selectedComputer.serviceTag);
+                handleChange("setor", selectedComputer.setor); // Supondo que o setor esteja no objeto computador
               }
             }}
           >
@@ -171,6 +175,13 @@ const NManutencao = () => {
             placeholder="Service Tag"
             value={criamanu.serviceTag}
             onChangeText={(value) => handleChange("serviceTag", value)}
+          />
+
+          <TextInput
+            style={{ ...styles.input }}
+            placeholder="setor"
+            value={criamanu.setor}
+            onChangeText={(value) => handleChange("setor", value)}
           />
 
           <TextInput

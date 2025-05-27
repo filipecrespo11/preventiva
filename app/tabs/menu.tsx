@@ -3,6 +3,7 @@ import { Stack, useRouter} from "expo-router";
 import Layout from "../componente/layout";
 import styles from "../componente/layoutStyles";
 
+
 export default function Index() {
   
   const router = useRouter();
@@ -10,6 +11,7 @@ export default function Index() {
   
   return (
     <Layout>
+
       <View>
         <Stack.Screen options={{ title: "Manutenção Preventiva" }} />
 
@@ -48,5 +50,6 @@ export default function Index() {
         </View>
       </View>
     </Layout>
+
   );
 }

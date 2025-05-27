@@ -87,11 +87,11 @@ useEffect(() => {
   }
 
   return (
-    <SafeAreaView>
-      <Layout>
-        <View>
-          {/* Calendário acima da agenda */}
-          <Calendar
+    
+        <Layout
+       
+      
+         children1={<Calendar
             current={selectedDate}
             onDayPress={(day: CalendarDay) => setSelectedDate(day.dateString)}
             markedDates={{
@@ -107,36 +107,63 @@ useEffect(() => {
               todayTextColor: "blue",
               arrowColor: "blue",
             }}
-          />
+          />}
+>
+          
+<Agenda
+  items={agendaItems}
+  selected={selectedDate}
+  onDayPress={(day: CalendarDay) => setSelectedDate(day.dateString)}
+  renderItem={(item: AgendaItem, firstItemInDay: boolean, dayKey: string) => {
+    // Formata a data em português
+    const dataFormatada = dayKey
+      ? new Date(dayKey).toLocaleDateString("pt-BR", {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        })
+      : "";
 
-          <Agenda
-            items={agendaItems}
-            selected={selectedDate}
-            onDayPress={(day: CalendarDay) => setSelectedDate(day.dateString)}
-            renderItem={(item: AgendaItem) => (
-              <View>
-                <Text style={{ ...styles.label }}>{item.tipo_manutencao}</Text>
-                <Text style={{ ...styles.label }}>{item.setor}</Text>
-                <Text style={{ ...styles.label }}>Service Tag: {item.serviceTag}</Text>
-              </View>
-            )}
-            renderKnob={() => (
-              <View>
-                <Text>Clique para ver as manutenções</Text>
-              </View>
-            )}
-            pastScrollRange={12}
-            futureScrollRange={12}
-            theme={{
-              agendaDayTextColor: "black",
-              agendaDayNumColor: "black",
-              agendaTodayColor: "blue",
-              agendaKnobColor: "blue",
-            }}
-          />
-        </View>
-      </Layout>
-    </SafeAreaView>
+    return (
+      <View
+        style={{
+          backgroundColor: "#fff",
+          borderRadius: 8,
+          padding: 12,
+          marginVertical: 6,
+          marginHorizontal: 10,
+          elevation: 2,
+          borderWidth: 1,
+          borderColor: "#e0e0e0",
+        }}
+      >
+        <Text style={{ fontWeight: "bold", color: "#1976d2", marginBottom: 4 }}>
+          {dataFormatada}
+        </Text>
+        <Text style={{ ...styles.label }}>Topo de manutenção:{item.tipo_manutencao}</Text>
+        <Text style={{ ...styles.label }}>Setor:{item.setor}</Text>
+        <Text style={{ ...styles.label }}>Service Tag: {item.serviceTag}</Text>
+      </View>
+    );
+  }}
+  renderKnob={() => null}
+  hideKnob={true}
+  showClosingKnob={false}
+  showOnlySelectedDayItems={true}
+    
+  pastScrollRange={12}
+  futureScrollRange={12}
+  theme={{
+    agendaDayTextColor: "black",
+    agendaDayNumColor: "black",
+    agendaTodayColor: "blue",
+    agendaKnobColor: "blue",
+  }}
+/>
+
+        </Layout>
+     
   );
 };
 

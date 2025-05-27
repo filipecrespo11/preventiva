@@ -22,7 +22,7 @@ const CadastropcScreen = () => {
 
   const [unidades] = useState<string[]>(["Hospital", "Operadora"]); // Lista de unidades
   const [setores] = useState<{ [key: string]: string[] }>({
-    Hospital: ["TI", "Posto A", "Posto B"],
+    Hospital: ["TI", "Posto A", "Posto B", "imagem", "Farmácia"], // Setores por unidade
     Operadora: ["Administração", "Financeiro", "RH"],
   }); // Setores por unidade
   const [selectedUnidade, setSelectedUnidade] = useState<string>(""); // Unidade selecionada
@@ -33,7 +33,7 @@ const CadastropcScreen = () => {
   const router = useRouter();
 
   const handleChange = (name: string, value: string) => {
-    setUser({ ...criapc, [name]: value });
+    setUser({ ...criapc, [name]: value.toUpperCase() }); // Atualiza o estado do computador, convertendo o valor para maiúsculas
   };
 
   const handleSubmit = async () => {
@@ -60,7 +60,7 @@ const CadastropcScreen = () => {
 
   return (
     <Layout>
-      <View >
+      <View>
         <Stack.Screen options={{ title: "Cadastro de Máquina" }} />
         <TextInput
           style={{...styles.input}}
@@ -100,6 +100,8 @@ const CadastropcScreen = () => {
           onValueChange={(value) => {
             setSelectedUnidade(value);
             setSelectedSetor(""); // Reseta o setor ao mudar a unidade
+                setUser({ ...criapc, unidade: value, setor: "" }); // <-- Atualiza o objeto principal
+            
           }}
           style={{...styles.input}}
         >
@@ -114,7 +116,12 @@ const CadastropcScreen = () => {
           <>
             <Picker
               selectedValue={selectedSetor}
-              onValueChange={(value) => setSelectedSetor(value)}
+              onValueChange={(value) => {setSelectedSetor(value);
+                 setUser({ ...criapc, setor: value }); // <-- Atualiza o objeto principal
+
+              }}
+              
+
               style={{...styles.input}}
             >
               <Picker.Item label="Selecione o Setor" value="" />

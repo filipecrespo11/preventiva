@@ -4,12 +4,14 @@ import axios from "axios";
 import { Stack } from "expo-router";
 import styles from "../componente/layoutStyles";
 import Layout from "../componente/layout";
+import AgendaManutencao from "./calendario";
 
 
 interface Manutencao {
     
     id_computador: string;
     serviceTag: string;
+    setor: string;
     id_usuarios: string;
     chamado: string;
     status_manutencao: string;
@@ -58,6 +60,7 @@ const ListMautencao: React.FC = () => {
     <View style={{...styles.containerlist}}>
       <Text style={{...styles.label}}>ID: do computador: {item.id_computador}</Text>
       <Text style={{...styles.label}}>Service Tag: {item.serviceTag}</Text>
+      <Text style={{...styles.label}}>Setor: {item.setor}</Text>
       <Text style={{...styles.label}}>ID do Usuário: {item.id_usuarios}</Text>
       <Text style={{...styles.label}}>Chamado: {item.chamado}</Text>
       <Text style={{...styles.label}}>Status da Manutenção: {item.status_manutencao}</Text>
@@ -73,17 +76,18 @@ const ListMautencao: React.FC = () => {
   );
 
   return (
+    
     <SafeAreaView style={{...styles.containerlist}}>
       
-      <Stack.Screen options={{ title: "Lista de Manutenções" }} />
+     <Layout children1={<AgendaManutencao />}>
       
-      <FlatList
+      <FlatList 
      
         data={Manutencao} // The array of items to render
         renderItem={renderItem} // The function to render each item
         keyExtractor={(item) => item.chamado} // Unique key for each item
       />
-      
+      </Layout>
     </SafeAreaView>
   );
 };
