@@ -6,6 +6,7 @@ import * as Sharing from "expo-sharing";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import * as Print from "expo-print";
+import Layout from "../componente/layout";
 
 interface Computador {
   _id: string;
@@ -56,7 +57,6 @@ const EtiquetaScreen: React.FC = () => {
     if (token) {
         fetchComputadores();
       }
-      fetchManutencoes(); // Sempre busca manutenções, pois não precisa de token
     }, [token]);
 
   useEffect(() => {
@@ -107,44 +107,44 @@ const EtiquetaScreen: React.FC = () => {
     }
   };
 
+
+const gerarHtmlEtiqueta = (item: Computador) => `
+  <html>
+    <body style="font-family: Arial; padding: 20px;">
+      <h2>Etiqueta do Computador</h2>
+      <p><strong>Nome:</strong> ${item.nome_computador}</p>
+      <p><strong>Fabricante:</strong> ${item.fabricante}</p>
+      <p><strong>Modelo:</strong> ${item.modelo}</p>
+      <p><strong>Service Tag:</strong> ${item.serviceTag}</p>
+      <p><strong>Patrimônio:</strong> ${item.patrimonio}</p>
+      <p><strong>Última Preventiva:</strong> ${formatDate(item.ultima_preventiva)}</p>
+    </body>
+  </html>
+`;
+
+
+
+
+
   const handlePrint = async () => {
-    if (!itemSelecionado) {
-      window.alert("Erro Nenhum item selecionado para impressão.");
-      return;
-    }
-  
-    if (!etiquetaRef.current) {
-      console.error("etiquetaRef está vazio ou não atribuído.");
-      window.alert("Erro Não foi possível capturar a etiqueta.");
-      return;
-    }
-  
-    try {
-      console.log("Capturando a etiqueta...");
-      const uri = await captureRef(etiquetaRef.current, {
-        format: "png",
-        quality: 1,
-      });
-  
-      console.log("Etiqueta capturada com sucesso:", uri);
-      window.alert("Etiqueta capturada com sucesso.");
-  
-      console.log("Compartilhando a etiqueta...");
-      if (await Sharing.isAvailableAsync()) {
-        await Sharing.shareAsync(uri);
-      } else {
-        console.log("Compartilhamento não disponível.");
-        window.alert("Compartilhamento não disponível no dispositivo.");
-      }
-    } catch (error) {
-      console.error("Erro ao capturar a etiqueta:", error);
-      window.alert("Erro Ocorreu um erro ao capturar a etiqueta.");
-    }
-  };
+      if (!itemSelecionado) {
+    Alert.alert("Erro", "Nenhum item selecionado para impressão.");
+    return;
+  }
+  try {
+    const html = gerarHtmlEtiqueta(itemSelecionado);
+    await Print.printAsync({ html });
+  } catch (error) {
+    console.error("Erro ao imprimir:", error);
+    Alert.alert("Erro", "Ocorreu um erro ao tentar imprimir.");
+  }
+};
 
   return (
-    <View style={styles.container}>
+    <Layout>
+      
       {/* Campo de Busca */}
+      
       <TextInput
         style={styles.input}
         placeholder="Digite a Service Tag"
@@ -169,8 +169,11 @@ const EtiquetaScreen: React.FC = () => {
           <Button title="Imprimir Etiqueta" onPress={handlePrint} color="rgb(4 155 92)" />
         </View>
       )}
-    </View>
+    
+    
+  </Layout> 
   );
+   
 };
 
 const styles = StyleSheet.create({

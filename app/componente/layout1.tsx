@@ -3,13 +3,13 @@ import styles from "./layoutStyles";
 
 interface LayoutProps {
   children?: React.ReactNode;
- 
+  children1?: React.ReactNode;
 
   
 }
 
 
-const Layout: React.FC<LayoutProps> = ({ children}) => {
+const Layout1: React.FC<LayoutProps> = ({ children, children1}) => {
   return (
     <div style={styles.container}>
       {/* Cabeçalho */}
@@ -22,7 +22,7 @@ const Layout: React.FC<LayoutProps> = ({ children}) => {
       <main style={styles.main}>
 
         <div style={styles.content}>{children}</div>
-        
+        <div style={styles.content}>{children1}</div>
         
         
         
@@ -39,4 +39,4 @@ const Layout: React.FC<LayoutProps> = ({ children}) => {
 };
 
 
-export default Layout;
+export default Layout1;

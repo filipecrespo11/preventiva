@@ -3,7 +3,7 @@ import { View, Text, SafeAreaView, Alert, Platform } from "react-native";
 import axios from "axios";
 import { Agenda, Calendar } from "react-native-calendars";
 import { enableScreens} from "react-native-screens";
-import Layout from "../componente/layout";
+import Layout2 from "../componente/layout2";
 import styles from "../componente/layoutStyles";
 
 
@@ -88,29 +88,10 @@ useEffect(() => {
 
   return (
     
-        <Layout
+        <Layout2
        
       
-         children1={<Calendar
-            current={selectedDate}
-            onDayPress={(day: CalendarDay) => setSelectedDate(day.dateString)}
-            markedDates={{
-              [selectedDate]: { selected: true, selectedColor: "blue" },
-              // Marcar datas que têm itens
-              ...Object.keys(agendaItems).reduce((acc, date) => {
-                acc[date] = acc[date] || { marked: true };
-                return acc;
-              }, {} as any),
-            }}
-            theme={{
-              selectedDayBackgroundColor: "blue",
-              todayTextColor: "blue",
-              arrowColor: "blue",
-            }}
-          />}
->
-          
-<Agenda
+         children1={<Agenda
   items={agendaItems}
   selected={selectedDate}
   onDayPress={(day: CalendarDay) => setSelectedDate(day.dateString)}
@@ -160,9 +141,30 @@ useEffect(() => {
     agendaTodayColor: "blue",
     agendaKnobColor: "blue",
   }}
-/>
+/>}
+>
 
-        </Layout>
+  <Calendar
+            current={selectedDate}
+            onDayPress={(day: CalendarDay) => setSelectedDate(day.dateString)}
+            markedDates={{
+              [selectedDate]: { selected: true, selectedColor: "blue" },
+              // Marcar datas que têm itens
+              ...Object.keys(agendaItems).reduce((acc, date) => {
+                acc[date] = acc[date] || { marked: true };
+                return acc;
+              }, {} as any),
+            }}
+            theme={{
+              selectedDayBackgroundColor: "blue",
+              todayTextColor: "blue",
+              arrowColor: "blue",
+            }}
+          />
+          
+
+
+        </Layout2>
      
   );
 };

@@ -22,17 +22,17 @@ const styles = {
     },
     body: {
       backgroundColor: "rgba(165, 56, 56, 0.74)", // Cor de fundo clara
-      
+      overflow: "auto",
       
     },
     main: {
-      flex: 1, // Faz o conteúdo principal ocupar o espaço restante
+      flex: "1",
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
       padding: "50px , 50px , 50px , 50px",
-      overflow: "auto", // Permite rolagem vertical se necessário
       
+     
       
       
     },
@@ -40,7 +40,6 @@ const styles = {
      
       width: "100%",
       maxWidth: "800px", // Limita a largura máxima do conteúdo
-      maxHeight: "700px", // Altura máxima para telas maiores
       padding: "20px",
       backgroundColor: "#ffffff", // Fundo branco para destacar o conteúdo
       borderRadius: "8px", // Bordas arredondadas
