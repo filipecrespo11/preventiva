@@ -38,7 +38,7 @@ const CadastroScreen = () => {
       <View >
         <TextInput
           style={{...styles.input}}
-          placeholder="Nome de usuário"
+          placeholder="Nome Completo"
           value={user.nome_usuario}
           onChangeText={(value)=> handleChange("nome_usuario", value)}
         />

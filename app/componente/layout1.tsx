@@ -1,15 +1,14 @@
 import React from "react";
 import styles from "./layoutStyles";
 
-interface LayoutProps {
+interface LayoutProps1 {
   children?: React.ReactNode;
   children1?: React.ReactNode;
-
-  
+ showChildren1?: boolean;
 }
 
 
-const Layout1: React.FC<LayoutProps> = ({ children, children1}) => {
+const Layout1: React.FC<LayoutProps1> = ({ children, children1, showChildren1}) => {
   return (
     <div style={styles.container}>
       {/* Cabeçalho */}
@@ -22,7 +21,9 @@ const Layout1: React.FC<LayoutProps> = ({ children, children1}) => {
       <main style={styles.main}>
 
         <div style={styles.content}>{children}</div>
-        <div style={styles.content}>{children1}</div>
+         {showChildren1 && children1 && (
+          <div style={styles.content}>{children1}</div>
+        )}
         
         
         

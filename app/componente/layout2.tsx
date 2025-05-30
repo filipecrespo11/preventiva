@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./layoutStyles";
 
 
+
 interface LayoutProps2 {
   children?: React.ReactNode;
   children1?: React.ReactNode;

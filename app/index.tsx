@@ -1,6 +1,6 @@
-import { Text, View, TouchableOpacity} from "react-native";
+import { Text, View, TouchableOpacity, useWindowDimensions} from "react-native";
 import { Stack, useRouter  } from "expo-router";
-import Layout from "./componente/layout";
+import Layout1 from "./componente/layout1";
 import styles from "./componente/layoutStyles";
 import AgendaManutencao from "./tabs/calendario";
 
@@ -8,9 +8,9 @@ export default function Index() {
 
 
     const router = useRouter();
-
+const { width } = useWindowDimensions();
   return (
-    <Layout children1={<AgendaManutencao />}>
+    <Layout1 showChildren1={width > 600} children1={<AgendaManutencao />}>
       <View>
         <Stack.Screen options={{ title: "Manutenção Preventiva" }} />
 
@@ -33,7 +33,7 @@ export default function Index() {
 
       
 
-       </Layout>
+       </Layout1>
 
   );
 }

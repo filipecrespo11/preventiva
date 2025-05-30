@@ -21,13 +21,10 @@ const Layout: React.FC<LayoutProps> = ({ children}) => {
       
       <main style={styles.main}>
 
-        <div style={styles.content}>{children}</div>
+        <div style={styles.content}>{children}</div>      
         
         
-        
-        
-        
-      </main>
+     </main>
       
 
       {/* Rodapé */}

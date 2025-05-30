@@ -7,6 +7,8 @@ import Layout2 from "../componente/layout2";
 import styles from "../componente/layoutStyles";
 
 
+
+
 interface Manutencao {
   id_computador: string;
   serviceTag: string;
@@ -122,7 +124,7 @@ useEffect(() => {
         <Text style={{ fontWeight: "bold", color: "#1976d2", marginBottom: 4 }}>
           {dataFormatada}
         </Text>
-        <Text style={{ ...styles.label }}>Topo de manutenção:{item.tipo_manutencao}</Text>
+        <Text style={{ ...styles.label }}>Tipo de manutenção:{item.tipo_manutencao}</Text>
         <Text style={{ ...styles.label }}>Setor:{item.setor}</Text>
         <Text style={{ ...styles.label }}>Service Tag: {item.serviceTag}</Text>
       </View>
@@ -132,7 +134,7 @@ useEffect(() => {
   hideKnob={true}
   showClosingKnob={false}
   showOnlySelectedDayItems={true}
-    
+  
   pastScrollRange={12}
   futureScrollRange={12}
   theme={{
@@ -141,6 +143,8 @@ useEffect(() => {
     agendaTodayColor: "blue",
     agendaKnobColor: "blue",
   }}
+renderCalendar={() => null} // <-- Adicione esta linha!
+
 />}
 >
 
@@ -161,7 +165,8 @@ useEffect(() => {
               arrowColor: "blue",
             }}
           />
-          
+
+
 
 
         </Layout2>
