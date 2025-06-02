@@ -220,6 +220,60 @@ const exportarRelatorio = async () => {
             ))
           )}
         </View>
+
+        {<Agenda
+  items={agendaItems}
+  selected={selectedDate}
+  onDayPress={(day: CalendarDay) => setSelectedDate(day.dateString)}
+  renderItem={(item: AgendaItem, firstItemInDay: boolean, dayKey: string) => {
+    // Formata a data em português
+    const dataFormatada = dayKey
+      ? new Date(dayKey).toLocaleDateString("pt-BR", {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        })
+      : "";
+
+    return (
+      <View
+        style={{
+          backgroundColor: "#fff",
+          borderRadius: 8,
+          padding: 12,
+          marginVertical: 6,
+          marginHorizontal: 10,
+          elevation: 2,
+          borderWidth: 1,
+          borderColor: "#e0e0e0",
+        }}
+      >
+        <Text style={{ fontWeight: "bold", color: "#1976d2", marginBottom: 4 }}>
+          {dataFormatada}
+        </Text>
+        <Text style={{ ...styles.label }}>Tipo de manutenção:{item.tipo_manutencao}</Text>
+        <Text style={{ ...styles.label }}>Setor:{item.setor}</Text>
+        <Text style={{ ...styles.label }}>Service Tag: {item.serviceTag}</Text>
+      </View>
+    );
+  }}
+  renderKnob={() => null}
+  hideKnob={true}
+  showClosingKnob={false}
+  showOnlySelectedDayItems={true}
+  
+  pastScrollRange={12}
+  futureScrollRange={12}
+  theme={{
+    agendaDayTextColor: "black",
+    agendaDayNumColor: "black",
+    agendaTodayColor: "blue",
+    agendaKnobColor: "blue",
+  }}
+renderCalendar={() => null} // <-- Adicione esta linha!
+
+/>}
         
       </>
     }
