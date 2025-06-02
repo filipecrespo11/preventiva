@@ -38,8 +38,10 @@ const styles = {
     },
     content: {
      
-      width: "100%",
+      width: "90%",
       maxWidth: "800px", // Limita a largura máxima do conteúdo
+    
+      
       padding: "20px",
       backgroundColor: "#ffffff", // Fundo branco para destacar o conteúdo
       borderRadius: "8px", // Bordas arredondadas

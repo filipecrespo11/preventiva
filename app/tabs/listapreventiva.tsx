@@ -8,7 +8,7 @@ import AgendaManutencao from "./calendario";
 
 
 interface Manutencao {
-    
+    _id: string; // ID do documento
     id_computador: string;
     serviceTag: string;
     setor: string;
@@ -56,11 +56,12 @@ const ListMautencao: React.FC = () => {
  const [searchTerm, setSearchTerm] = useState<string>(""); // Novo estado para pesquisa
 
   const TableHeader = () => (
-  <View style={{ flexDirection: "row", backgroundColor: "#e0e0e0", padding: 8 }}>
     
+  <View style={{ flexDirection: "row", backgroundColor: "#e0e0e0", padding: 8 }}>
+   
     <Text style={[styles.label, { flex: 1, fontWeight: "bold" }]}>Service Tag: </Text>
     <Text style={[styles.label, { flex: 1, fontWeight: "bold" }]}>Setor: </Text>
-    <Text style={[styles.label, { flex: 1, fontWeight: "bold" }]}>ID do Usuário: </Text>
+   
     <Text style={[styles.label, { flex: 1, fontWeight: "bold" }]}>Chamado: </Text>
     <Text style={[styles.label, { flex: 1, fontWeight: "bold" }]}>Status da Manutenção: </Text>
     <Text style={[styles.label, { flex: 1, fontWeight: "bold" }]}>Data da Manutenção Anterior: </Text>
@@ -75,10 +76,10 @@ const ListMautencao: React.FC = () => {
 
   const renderItem = ({ item }: { item: Manutencao }) => (
     <View style={{ flexDirection: "row", borderBottomWidth: 1, borderColor: "#e0e0e0", padding: 8 }}>
-     
+    
       <Text style={[styles.label, { flex: 1 }]}>{item.serviceTag}</Text>
       <Text style={[styles.label, { flex: 1 }]}>{item.setor}</Text>
-      <Text style={[styles.label, { flex: 1 }]}>{item.id_usuarios}</Text>
+      
       <Text style={[styles.label, { flex: 1 }]}>{item.chamado}</Text>
       <Text style={[styles.label, { flex: 1 }]}>{item.status_manutencao}</Text>
       <Text style={[styles.label, { flex: 1 }]}>{formatDate(item.data_manutencao_anterior)}</Text>
@@ -88,6 +89,8 @@ const ListMautencao: React.FC = () => {
            
     </View>
   );
+
+
 const { width } = useWindowDimensions();
   return (
     

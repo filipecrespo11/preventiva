@@ -1,0 +1,459 @@
+import React, { useEffect, useState } from "react";
+import { View, Text, Button, ScrollView, ActivityIndicator, Alert, Platform, TextInput, TouchableOpacity } from "react-native";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import * as Print from "expo-print";
+import axios from "axios";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Layout from "../componente/layout";
+
+interface ChecklistItem {
+  nome: string;
+  sim: boolean;
+  nao: boolean;
+  comentario: string;
+
+}
+
+interface manutencao {
+    _id: string; // ID do documento
+    id_computador: string;
+    serviceTag: string;
+    setor: string;
+    id_usuarios: string;
+    chamado: string;
+    status_manutencao: string;
+    data_manutencao_anterior: string;
+    data_manutencao: string;
+    tipo_manutencao: string;
+    descricao_manutencao: string;   
+
+}
+
+interface computador {
+  _id: string;
+    nome_computador: string;
+    fabricante: string;
+    modelo: string;
+    serviceTag: string;
+    patrimonio: string;
+    unidade: string;
+    setor: string;
+    estado: string;
+}
+
+interface usuario {
+  _id: string;  
+    nome_usuario: string;
+}
+
+interface tecnico {
+  nome_usuario: string; 
+}
+
+
+const RelatorioChecklist = () => {
+  const params = useLocalSearchParams();
+  const router = useRouter();
+  const [searchId, setSearchId] = useState(params.id ? String(params.id) : "");
+  const [manutencao, setManutencao] = useState<any>(null);
+  const [computador, setComputador] = useState<any>(null);
+  const [tecnico, setTecnico] = useState<any>(null);
+  const [usuario, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
+
+  // Estados para os campos de checklist
+  const [hardware, setHardware] = useState<ChecklistItem[]>([
+    { nome: "Placa Mãe", sim: false, nao: false, comentario: "" },
+    { nome: "Placa de Vídeo", sim: false, nao: false, comentario: "" },
+    { nome: "Placa de Rede", sim: false, nao: false, comentario: "" },
+    { nome: "Processador", sim: false, nao: false, comentario: "" },
+    { nome: "Fonte de Energia", sim: false, nao: false, comentario: "" },
+    { nome: "Memória RAM", sim: false, nao: false, comentario: "" },
+    { nome: "Hard Disk", sim: false, nao: false, comentario: "" },
+  ]);
+
+  const [software, setSoftware] = useState<ChecklistItem[]>([
+    { nome: "Anti Vírus (Sophos)", sim: false, nao: false, comentario: "" },
+    { nome: "Atualização do Update", sim: false, nao: false, comentario: "" },
+    { nome: "Limpeza de Disco", sim: false, nao: false, comentario: "" },
+    { nome: "Versões Anteriores", sim: false, nao: false, comentario: "" },
+    { nome: "Programas Padrões", sim: false, nao: false, comentario: "" },
+    { nome: "MV", sim: false, nao: false, comentario: "" },
+    { nome: "LibreOffice", sim: false, nao: false, comentario: "" },
+    { nome: "Administrador Local", sim: false, nao: false, comentario: "" },
+    { nome: "TeamViewer", sim: false, nao: false, comentario: "" },
+    { nome: "Ultra VNC", sim: false, nao: false, comentario: "" },
+    { nome: "Nome do Host", sim: false, nao: false, comentario: "" },
+  ]);
+
+  const [perifericos, setPerifericos] = useState<ChecklistItem[]>([
+    { nome: "Teclado", sim: false, nao: false, comentario: "" },
+    { nome: "Mouse", sim: false, nao: false, comentario: "" },
+    { nome: "Monitor", sim: false, nao: false, comentario: "" },
+    { nome: "Cabos", sim: false, nao: false, comentario: "" },
+    { nome: "No-Break", sim: false, nao: false, comentario: "" },
+  ]);
+
+  // Função para carregar os checklists do AsyncStorage
+  const carregarChecklists = async () => {
+    try {
+      const hardwareData = await AsyncStorage.getItem('checklist_hardware');
+      const softwareData = await AsyncStorage.getItem('checklist_software');
+      const perifericosData = await AsyncStorage.getItem('checklist_perifericos');
+
+      if (hardwareData) {
+        const parsedHardware = JSON.parse(hardwareData);
+        setHardware(parsedHardware);
+        console.log("Hardware carregado do AsyncStorage:", parsedHardware);
+      }
+      if (softwareData) {
+        const parsedSoftware = JSON.parse(softwareData);
+        setSoftware(parsedSoftware);
+        console.log("Software carregado do AsyncStorage:", parsedSoftware);
+      }
+      if (perifericosData) {
+        const parsedPerifericos = JSON.parse(perifericosData);
+        setPerifericos(parsedPerifericos);
+        console.log("Periféricos carregado do AsyncStorage:", parsedPerifericos);
+      }
+    } catch (error) {
+      console.error("Erro ao carregar checklists do AsyncStorage:", error);
+      Alert.alert("Erro", "Não foi possível carregar os checklists salvos.");
+    }
+  };
+
+  // Função para buscar os dados pelo ID digitado
+  const buscarRelatorio = async () => {
+    if (!searchId) {
+      Alert.alert("Atenção", "Digite o ID da manutenção.");
+      return;
+    }
+    setLoading(true);
+    try {
+      // Buscar manutenção
+      console.log(`Buscando manutenção para o ID: ${searchId}`);
+      const manuResponse = await axios.get(`http://localhost:3000/manurota/manutencoes/${searchId}`);
+      console.log("Resposta da API /manurota/manutencoes:", manuResponse.data);
+      setManutencao(manuResponse.data);
+
+      // Buscar computador
+      if (manuResponse.data.id_computador) {
+        console.log(`Buscando computador para o ID: ${manuResponse.data.id_computador}`);
+        const compResponse = await axios.get(`http://localhost:3000/compurota/computadores/${manuResponse.data.id_computador}`);
+        console.log("Resposta da API /compurota/computadores:", compResponse.data);
+        setComputador(compResponse.data);
+      } else {
+        console.warn("ID do computador não encontrado na manutenção.");
+        Alert.alert("Aviso", "ID do computador não encontrado na manutenção.");
+        setComputador(null);
+      }
+
+     // Buscar nome do técnico
+if (manuResponse.data.id_usuarios) {
+  const userResponse = await axios.get(`http://localhost:3000/auterota/usuarios`);
+  const usuario = userResponse.data.find((u: any) => u._id === manuResponse.data.id_usuarios);
+  if (usuario) {
+    setTecnico(usuario.nome_usuario);
+    console.log("Técnico encontrado:", usuario.nome_usuario);
+  } else {
+    setTecnico("(Não encontrado)");
+    console.warn("Técnico não encontrado para o ID:", manuResponse.data.id_usuarios);
+  }
+} else {
+  setTecnico("(Não encontrado)");
+  console.warn("ID de usuário não encontrado na manutenção.");
+}
+
+
+
+      // Carregar checklists do AsyncStorage
+      await carregarChecklists();
+    } catch (error: any) {
+      console.error("Erro ao buscar dados:", error.message);
+      if (error.response) {
+        console.error("Detalhes do erro na resposta:", error.response.data);
+        console.error("Status do erro:", error.response.status);
+      }
+      Alert.alert("Erro", "Não foi possível carregar os dados do relatório. Verifique o console para mais detalhes.");
+      setManutencao(null);
+      setComputador(null);
+      setTecnico(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Busca automática se vier ID pela URL
+  useEffect(() => {
+    if (searchId) {
+      buscarRelatorio();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchId]);
+
+  // Função para atualizar os campos de checklist
+  const atualizarChecklist = (
+    tipo: "hardware" | "software" | "perifericos",
+    index: number,
+    key: "sim" | "nao" | "comentario",
+    valor: any
+  ) => {
+    const setter = tipo === "hardware" ? setHardware : tipo === "software" ? setSoftware : setPerifericos;
+    const state = tipo === "hardware" ? hardware : tipo === "software" ? software : perifericos;
+    const updatedItems = [...state];
+    updatedItems[index] = { ...updatedItems[index], [key]: valor };
+    setter(updatedItems);
+  };
+
+  const gerarHtmlRelatorio = () => {
+    const renderRows = (itens: ChecklistItem[] = []) =>
+      itens
+        .map(
+          (item) => `
+          <tr>
+            <td>${item.nome}</td>
+            <td style="text-align:center">${item.sim ? "x" : ""}</td>
+            <td style="text-align:center">${item.nao ? "x" : ""}</td>
+            <td>${item.comentario || ""}</td>
+          </tr>
+        `
+        )
+        .join("");
+
+    return `
+      <html>
+        <head>
+          <style>
+            body { font-family: Arial, sans-serif; margin: 20px; }
+            table { border-collapse: collapse; width: 100%; }
+            th, td { border: 1px solid #000; padding: 4px; text-align: left; }
+            th { background: #f2f2f2; }
+            .cabecalho { font-size: 14px; }
+            .secao { background: #ccc; font-weight: bold; text-align: center; }
+            .assinatura { font-size: 12px; margin-top: 20px; }
+          </style>
+        </head>
+        <body>
+          <table>
+            <tr>
+              <td class="cabecalho"><b>Setor:</b> ${computador?.setor || ""}</td>
+              <td class="cabecalho"><b>Data:</b> ${manutencao?.data_manutencao || ""}</td>
+              <td class="cabecalho"><b>Nome do Técnico:</b> ${tecnico || "(Preencher manualmente)"}</td>
+            </tr>
+            <tr>
+              <td class="cabecalho"><b>Fabricante:</b> ${computador?.fabricante || ""}</td>
+              <td class="cabecalho"><b>Modelo:</b> ${computador?.modelo || ""}</td>
+              <td class="cabecalho"><b>Nome da Máquina:</b> ${computador?.nome_computador || ""}</td>
+              <td class="cabecalho"><b>N/S:</b> ${computador?.serviceTag || ""}</td>
+            </tr>
+          </table>
+          <div class="secao">Hardware</div>
+          <table>
+            <tr>
+              <th>Descrição do Micro</th>
+              <th>SIM</th>
+              <th>NÃO</th>
+              <th>Comentários</th>
+            </tr>
+            ${renderRows(hardware)}
+          </table>
+          <div class="secao">Software</div>
+          <table>
+            <tr>
+              <th>Descrição do Micro</th>
+              <th>SIM</th>
+              <th>NÃO</th>
+              <th>Comentários</th>
+            </tr>
+            ${renderRows(software)}
+          </table>
+          <div class="secao">Periféricos do Micro</div>
+          <table>
+            <tr>
+              <th>Descrição do Micro</th>
+              <th>SIM</th>
+              <th>NÃO</th>
+              <th>Comentários</th>
+            </tr>
+            ${renderRows(perifericos)}
+          </table>
+          <div class="assinatura">
+            <p>Elaborado por: ${tecnico || "(Preencher manualmente)"}</p>
+            <p>Aprovado por: ____________________________</p>
+          </div>
+        </body>
+      </html>
+    `;
+  };
+
+  const exportarRelatorio = async () => {
+    const html = gerarHtmlRelatorio();
+    if (Platform.OS === "web") {
+      const printWindow = window.open("", "_blank");
+      if (printWindow) {
+        printWindow.document.write(html);
+        printWindow.document.close();
+        printWindow.focus();
+        printWindow.print();
+        printWindow.close();
+      }
+    } else {
+      await Print.printAsync({ html });
+    }
+  };
+
+  return (
+    <Layout>
+      <ScrollView style={{ padding: 10 }}>
+        {/* Campo de pesquisa */}
+        <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 16 }}>
+          <TextInput
+            style={{
+              borderWidth: 1,
+              borderColor: "#ccc",
+              borderRadius: 5,
+              padding: 8,
+              flex: 1,
+              marginRight: 8,
+            }}
+            placeholder="ID da manutenção"
+            value={searchId}
+            onChangeText={setSearchId}
+          />
+          <Button title="Pesquisar" onPress={buscarRelatorio} color="rgb(4 155 92)" />
+        </View>
+
+       
+        {/* Exibir dados mesmo que apenas alguns sejam carregados */}
+        {(manutencao || computador || tecnico) && (
+          <View style={{ marginTop: 20 }}>
+            <Text style={{ fontWeight: "bold" }}>Setor: {computador?.setor || "Não carregado"}</Text>
+            <Text>Data: {manutencao?.data_manutencao || "Não carregado"}</Text>
+            <Text>Nome do Técnico: {tecnico || "(Preencher manualmente)"}</Text>
+            <Text>Fabricante: {computador?.fabricante || "Não carregado"}</Text>
+            <Text>Modelo: {computador?.modelo || "Não carregado"}</Text>
+            <Text>Nome da Máquina: {computador?.nome_computador || "Não carregado"}</Text>
+            <Text>Service Tag: {computador?.serviceTag || "Não carregado"}</Text>
+          </View>
+        )}
+
+        {/* Formulário de Checklist */}
+        <Text style={{ fontWeight: "bold", marginTop: 10 }}>Checklist de Hardware</Text>
+        {hardware.map((item, index) => (
+          <View key={item.nome} style={{ flexDirection: "row", alignItems: "center", marginBottom: 5 }}>
+            <Text style={{ flex: 2 }}>{item.nome}</Text>
+            <TouchableOpacity
+              style={{
+                borderWidth: 1,
+                borderColor: "#ccc",
+                padding: 5,
+                marginRight: 5,
+                backgroundColor: item.sim ? "#4a90e2" : "white",
+              }}
+              onPress={() => atualizarChecklist("hardware", index, "sim", !item.sim)}
+            >
+              <Text style={{ color: item.sim ? "white" : "black" }}>Sim</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                borderWidth: 1,
+                borderColor: "#ccc",
+                padding: 5,
+                marginRight: 5,
+                backgroundColor: item.nao ? "#4a90e2" : "white",
+              }}
+              onPress={() => atualizarChecklist("hardware", index, "nao", !item.nao)}
+            >
+              <Text style={{ color: item.nao ? "white" : "black" }}>Não</Text>
+            </TouchableOpacity>
+            <TextInput
+              style={{ flex: 2, borderWidth: 1, borderColor: "#ccc", marginLeft: 5, padding: 2 }}
+              placeholder="Comentário"
+              value={item.comentario}
+              onChangeText={(txt) => atualizarChecklist("hardware", index, "comentario", txt)}
+            />
+          </View>
+        ))}
+
+        <Text style={{ fontWeight: "bold", marginTop: 10 }}>Checklist de Software</Text>
+        {software.map((item, index) => (
+          <View key={item.nome} style={{ flexDirection: "row", alignItems: "center", marginBottom: 5 }}>
+            <Text style={{ flex: 2 }}>{item.nome}</Text>
+            <TouchableOpacity
+              style={{
+                borderWidth: 1,
+                borderColor: "#ccc",
+                padding: 5,
+                marginRight: 5,
+                backgroundColor: item.sim ? "#4a90e2" : "white",
+              }}
+              onPress={() => atualizarChecklist("software", index, "sim", !item.sim)}
+            >
+              <Text style={{ color: item.sim ? "white" : "black" }}>Sim</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                borderWidth: 1,
+                borderColor: "#ccc",
+                padding: 5,
+                marginRight: 5,
+                backgroundColor: item.nao ? "#4a90e2" : "white",
+              }}
+              onPress={() => atualizarChecklist("software", index, "nao", !item.nao)}
+            >
+              <Text style={{ color: item.nao ? "white" : "black" }}>Não</Text>
+            </TouchableOpacity>
+            <TextInput
+              style={{ flex: 2, borderWidth: 1, borderColor: "#ccc", marginLeft: 5, padding: 2 }}
+              placeholder="Comentário"
+              value={item.comentario}
+              onChangeText={(txt) => atualizarChecklist("software", index, "comentario", txt)}
+            />
+          </View>
+        ))}
+
+        <Text style={{ fontWeight: "bold", marginTop: 10 }}>Checklist de Periféricos</Text>
+        {perifericos.map((item, index) => (
+          <View key={item.nome} style={{ flexDirection: "row", alignItems: "center", marginBottom: 5 }}>
+            <Text style={{ flex: 2 }}>{item.nome}</Text>
+            <TouchableOpacity
+              style={{
+                borderWidth: 1,
+                borderColor: "#ccc",
+                padding: 5,
+                marginRight: 5,
+                backgroundColor: item.sim ? "#4a90e2" : "white",
+              }}
+              onPress={() => atualizarChecklist("perifericos", index, "sim", !item.sim)}
+            >
+              <Text style={{ color: item.sim ? "white" : "black" }}>Sim</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                borderWidth: 1,
+                borderColor: "#ccc",
+                padding: 5,
+                marginRight: 5,
+                backgroundColor: item.nao ? "#4a90e2" : "white",
+              }}
+              onPress={() => atualizarChecklist("perifericos", index, "nao", !item.nao)}
+            >
+              <Text style={{ color: item.nao ? "white" : "black" }}>Não</Text>
+            </TouchableOpacity>
+            <TextInput
+              style={{ flex: 2, borderWidth: 1, borderColor: "#ccc", marginLeft: 5, padding: 2 }}
+              placeholder="Comentário"
+              value={item.comentario}
+              onChangeText={(txt) => atualizarChecklist("perifericos", index, "comentario", txt)}
+            />
+          </View>
+        ))}
+
+        {/* Botão de exportar relatório sempre visível após a busca */}
+        <Button title="Exportar Relatório" onPress={exportarRelatorio} color="rgb(4 155 92)" />
+      </ScrollView>
+    </Layout>
+  );
+};
+
+export default RelatorioChecklist;

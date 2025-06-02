@@ -198,6 +198,8 @@ const exportarRelatorio = async () => {
             onChange={e => setDataFim(e.target.value)}
             style={{ marginRight: 10 }}
           />
+          </View>
+        <View style={{ margin: 10 }}>
           <Button title="Exportar Relatório" onPress={exportarRelatorio} />
         </View>
         {/* Relatório filtrado */}

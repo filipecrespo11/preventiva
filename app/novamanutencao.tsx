@@ -139,7 +139,7 @@ const NManutencao = () => {
         },
       });
       Alert.alert("Sucesso", "Manutenção criada com sucesso!");
-      router.push("/tabs/menu");
+      router.push(`./tabs/relatorioChecklist?id=${criamanu.serviceTag}` as any);
     } catch (error) {
       console.error("Erro ao criar manutenção:", error);
       Alert.alert("Erro", "Não foi possível criar a manutenção. Tente novamente.");

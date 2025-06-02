@@ -44,6 +44,10 @@ export default function Index() {
             <Text style={styles.buttonText}>Gerar Etiqueta</Text>
           </TouchableOpacity>
 
+          <TouchableOpacity style={{...styles.button}}  onPress={() => router.push("/tabs/relatorioChecklist")}>
+            <Text style={styles.buttonText}>CheckList</Text>
+          </TouchableOpacity>
+
           <TouchableOpacity style={{...styles.button}}  onPress={() => router.push("/tabs/calendario")}>
             <Text style={styles.buttonText}>Calendario</Text>
           </TouchableOpacity>
