@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { View, Text, StyleSheet, Button, FlatList, TextInput, Alert } from "react-native";
+import { View, Text, StyleSheet, Button, FlatList, TextInput, Alert, Platform } from "react-native";
 import QRCode from "react-native-qrcode-svg";
 import { captureRef } from "react-native-view-shot";
 import * as Sharing from "expo-sharing";
@@ -22,13 +22,14 @@ interface Computador {
 }
 
 const EtiquetaScreen: React.FC = () => {
-    const { token } = useAuth(); // Obtém o token do contexto de autenticação
+  const { token } = useAuth(); // Obtém o token do contexto de autenticação
   const [computadores, setComputadores] = useState<Computador[]>([]);
   const [manutencoes, setManutencoes] = useState<any[]>([]);
   const [dadosCombinados, setDadosCombinados] = useState<Computador[]>([]);
   const [serviceTag, setServiceTag] = useState<string>(""); // Campo para buscar pela Service Tag
   const [itemSelecionado, setItemSelecionado] = useState<Computador | null>(null); // Item selecionado
   const etiquetaRef = useRef<View>(null);
+  const qrCodeRef = useRef<View>(null);
 
   useEffect(() => {
     const fetchComputadores = async () => {
@@ -55,9 +56,9 @@ const EtiquetaScreen: React.FC = () => {
     };
 
     if (token) {
-        fetchComputadores();
-      }
-    }, [token]);
+      fetchComputadores();
+    }
+  }, [token]);
 
   useEffect(() => {
     const combinados = computadores.map((computador) => {
@@ -102,49 +103,104 @@ const EtiquetaScreen: React.FC = () => {
     if (encontrado) {
       setItemSelecionado(encontrado);
     } else {
-      window.alert( "Nenhum item encontrado com essa Service Tag.");
+      window.alert("Nenhum item encontrado com essa Service Tag.");
       setItemSelecionado(null);
     }
   };
 
+  const getQrCodeBase64 = async () => {
+    if (qrCodeRef.current && itemSelecionado) {
+      try {
+        const uri = await captureRef(qrCodeRef, {
+          format: "png",
+          quality: 0.9,
+          result: "base64", // Captura diretamente como Base64
+        });
+        return `data:image/png;base64,${uri}`;
+      } catch (error) {
+        console.error("Erro ao capturar QR Code:", error);
+        Alert.alert("Erro", "Falha ao capturar o QR Code para impressão.");
+        return null;
+      }
+    }
+    return null;
+  };
 
-const gerarHtmlEtiqueta = (item: Computador) => `
-  <html>
-    <body style="font-family: Arial; padding: 20px;">
-      <h2>Etiqueta do Computador</h2>
-      <p><strong>Nome:</strong> ${item.nome_computador}</p>
-      <p><strong>Fabricante:</strong> ${item.fabricante}</p>
-      <p><strong>Modelo:</strong> ${item.modelo}</p>
-      <p><strong>Service Tag:</strong> ${item.serviceTag}</p>
-      <p><strong>Patrimônio:</strong> ${item.patrimonio}</p>
-      <p><strong>Última Preventiva:</strong> ${formatDate(item.ultima_preventiva)}</p>
-    </body>
-  </html>
-`;
-
-
-
-
+  const gerarHtmlEtiqueta = async (item: Computador) => {
+    const qrCodeBase64 = await getQrCodeBase64();
+    return `
+      <html>
+        <head>
+          <style>
+            body { font-family: Arial; margin: 0; padding: 10px; }
+            .etiqueta {
+              width: 300px;
+              border: 2px solid #000;
+              padding: 10px;
+              margin: 0 auto;
+              text-align: center;
+              background-color: #fff;
+            }
+            h2 { color: #1976d2; font-size: 18px; margin: 0 0 10px; }
+            p { font-size: 14px; margin: 5px 0; }
+            .qr-image { margin: 10px 0; }
+          </style>
+        </head>
+        <body>
+          <div class="etiqueta">
+            <h2>Manutenção Preventiva</h2>
+            <p><strong>Equipamento do Computador</strong></p>
+            ${
+              qrCodeBase64
+                ? `<img src="${qrCodeBase64}" alt="QR Code" class="qr-image" style="width: 90px; height: 90px;">`
+                : '<p style="font-style: italic; color: #888;">[QR Code não disponível]</p>'
+            }
+            <p>Nome: ${item.nome_computador}</p>
+            <p>Fabricante: ${item.fabricante}</p>
+            <p>Modelo: ${item.modelo}</p>
+            <p>Service Tag: ${item.serviceTag}</p>
+            <p>Patrimônio: ${item.patrimonio}</p>
+            <p>Última Preventiva: ${formatDate(item.ultima_preventiva)}</p>
+            <p><strong>IMPRIMA ETIQUETA</strong></p>
+          </div>
+        </body>
+      </html>
+    `;
+  };
 
   const handlePrint = async () => {
-      if (!itemSelecionado) {
-    Alert.alert("Erro", "Nenhum item selecionado para impressão.");
-    return;
-  }
-  try {
-    const html = gerarHtmlEtiqueta(itemSelecionado);
-    await Print.printAsync({ html });
-  } catch (error) {
-    console.error("Erro ao imprimir:", error);
-    Alert.alert("Erro", "Ocorreu um erro ao tentar imprimir.");
-  }
-};
+    if (!itemSelecionado) {
+      Alert.alert("Erro", "Nenhum item selecionado para impressão.");
+      return;
+    }
+    try {
+      const html = await gerarHtmlEtiqueta(itemSelecionado);
+
+      if (Platform.OS === "web") {
+        // Para web: abrir uma nova janela e imprimir
+        const printWindow = window.open("", "_blank");
+        if (printWindow) {
+          printWindow.document.write(html);
+          printWindow.document.close();
+          printWindow.focus();
+          printWindow.print();
+          printWindow.close();
+        } else {
+          Alert.alert("Erro", "Não foi possível abrir a janela de impressão. Verifique as permissões do navegador.");
+        }
+      } else {
+        // Para mobile (Expo): usar Print.printAsync
+        await Print.printAsync({ html });
+      }
+    } catch (error) {
+      console.error("Erro ao imprimir:", error);
+      Alert.alert("Erro", "Ocorreu um erro ao tentar imprimir.");
+    }
+  };
 
   return (
     <Layout>
-      
       {/* Campo de Busca */}
-      
       <TextInput
         style={styles.input}
         placeholder="Digite a Service Tag"
@@ -157,7 +213,9 @@ const gerarHtmlEtiqueta = (item: Computador) => `
       {itemSelecionado && (
         <View ref={etiquetaRef} style={styles.etiquetas}>
           <Text style={styles.title}>Etiqueta do Computador</Text>
-          <QRCode value={itemSelecionado.serviceTag} size={90} />
+          <View ref={qrCodeRef}>
+            <QRCode value={itemSelecionado.serviceTag} size={90} />
+          </View>
           <Text style={styles.info}>Nome: {itemSelecionado.nome_computador}</Text>
           <Text style={styles.info}>Fabricante: {itemSelecionado.fabricante}</Text>
           <Text style={styles.info}>Modelo: {itemSelecionado.modelo}</Text>
@@ -169,11 +227,8 @@ const gerarHtmlEtiqueta = (item: Computador) => `
           <Button title="Imprimir Etiqueta" onPress={handlePrint} color="rgb(4 155 92)" />
         </View>
       )}
-    
-    
-  </Layout> 
+    </Layout>
   );
-   
 };
 
 const styles = StyleSheet.create({

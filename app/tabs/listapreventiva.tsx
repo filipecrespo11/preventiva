@@ -3,7 +3,7 @@ import { View, Text, FlatList, SafeAreaView, TextInput, useWindowDimensions } fr
 import axios from "axios";
 import { Stack } from "expo-router";
 import styles from "../componente/layoutStyles";
-import Layout1 from "../componente/layout1";
+import Layout from "../componente/layout";
 import AgendaManutencao from "./calendario";
 
 
@@ -93,7 +93,7 @@ const { width } = useWindowDimensions();
     
     <SafeAreaView style={{...styles.containerlist}}>
       
-     <Layout1 showChildren1={width > 600} children1={<AgendaManutencao />}>
+     <Layout>
 
         <TextInput
         style={{...styles.input}}
@@ -108,7 +108,7 @@ const { width } = useWindowDimensions();
         renderItem={renderItem} // The function to render each item
         keyExtractor={(item) => item.chamado} // Unique key for each item
       />
-      </Layout1>
+      </Layout>
     </SafeAreaView>
   );
 };
