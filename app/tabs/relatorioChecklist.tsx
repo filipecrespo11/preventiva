@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Button, ScrollView, ActivityIndicator, Alert, Platform, TextInput, TouchableOpacity } from "react-native";
+import { View, Text, Button, ScrollView, Alert, Platform, TextInput, TouchableOpacity } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import * as Print from "expo-print";
 import axios from "axios";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useAuth } from "../context/AuthContext";
 import Layout from "../componente/layout";
 
+ 
 interface ChecklistItem {
   nome: string;
   sim: boolean;
@@ -49,12 +50,21 @@ interface usuario {
 interface tecnico {
   nome_usuario: string; 
 }
+interface AuthContextType {
+  
+  checklist_hardware?: string;
+  checklist_software?: string;
+  checklist_perifericos?: string;
 
+}
+const { token } = useAuth();
 
 const RelatorioChecklist = () => {
+    const { token, checklist_hardware, checklist_software, checklist_perifericos } = useAuth();
+
   const params = useLocalSearchParams();
   const router = useRouter();
-  const [searchId, setSearchId] = useState(params.id ? String(params.id) : "");
+  const [searchTag, setsearchTag] = useState(params.id ? String(params.id) : "");
   const [manutencao, setManutencao] = useState<any>(null);
   const [computador, setComputador] = useState<any>(null);
   const [tecnico, setTecnico] = useState<any>(null);
@@ -63,85 +73,110 @@ const RelatorioChecklist = () => {
 
   // Estados para os campos de checklist
   const [hardware, setHardware] = useState<ChecklistItem[]>([
-    { nome: "Placa Mãe", sim: false, nao: false, comentario: "" },
-    { nome: "Placa de Vídeo", sim: false, nao: false, comentario: "" },
-    { nome: "Placa de Rede", sim: false, nao: false, comentario: "" },
-    { nome: "Processador", sim: false, nao: false, comentario: "" },
-    { nome: "Fonte de Energia", sim: false, nao: false, comentario: "" },
-    { nome: "Memória RAM", sim: false, nao: false, comentario: "" },
-    { nome: "Hard Disk", sim: false, nao: false, comentario: "" },
+    { nome: "Placa Mãe", sim: false, nao: false, comentario: "ok" },
+    { nome: "Placa de Vídeo", sim: false, nao: false, comentario: "ok" },
+    { nome: "Placa de Rede", sim: false, nao: false, comentario: "ok" },
+    { nome: "Processador", sim: false, nao: false, comentario: "ok" },
+    { nome: "Fonte de Energia", sim: false, nao: false, comentario: "ok" },
+    { nome: "Memória RAM", sim: false, nao: false, comentario: "ok" },
+    { nome: "Hard Disk", sim: false, nao: false, comentario: "ok" },
   ]);
 
   const [software, setSoftware] = useState<ChecklistItem[]>([
-    { nome: "Anti Vírus (Sophos)", sim: false, nao: false, comentario: "" },
-    { nome: "Atualização do Update", sim: false, nao: false, comentario: "" },
-    { nome: "Limpeza de Disco", sim: false, nao: false, comentario: "" },
-    { nome: "Versões Anteriores", sim: false, nao: false, comentario: "" },
-    { nome: "Programas Padrões", sim: false, nao: false, comentario: "" },
-    { nome: "MV", sim: false, nao: false, comentario: "" },
-    { nome: "LibreOffice", sim: false, nao: false, comentario: "" },
-    { nome: "Administrador Local", sim: false, nao: false, comentario: "" },
-    { nome: "TeamViewer", sim: false, nao: false, comentario: "" },
-    { nome: "Ultra VNC", sim: false, nao: false, comentario: "" },
-    { nome: "Nome do Host", sim: false, nao: false, comentario: "" },
+    { nome: "Anti Vírus (Sophos)", sim: false, nao: false, comentario: "ok" },
+    { nome: "Atualização do Update", sim: false, nao: false, comentario: "ok" },
+    { nome: "Limpeza de Disco", sim: false, nao: false, comentario: "ok" },
+    { nome: "Versões Anteriores", sim: false, nao: false, comentario: "ok" },
+    { nome: "Programas Padrões", sim: false, nao: false, comentario: "ok" },
+    { nome: "MV", sim: false, nao: false, comentario: "ok" },
+    { nome: "LibreOffice", sim: false, nao: false, comentario: "ok" },
+    { nome: "Administrador Local", sim: false, nao: false, comentario: "ok" },
+    { nome: "TeamViewer", sim: false, nao: false, comentario: "ok" },
+    { nome: "Ultra VNC", sim: false, nao: false, comentario: "ok" },
+    { nome: "Nome do Host", sim: false, nao: false, comentario: "ok" },
   ]);
 
   const [perifericos, setPerifericos] = useState<ChecklistItem[]>([
-    { nome: "Teclado", sim: false, nao: false, comentario: "" },
-    { nome: "Mouse", sim: false, nao: false, comentario: "" },
-    { nome: "Monitor", sim: false, nao: false, comentario: "" },
-    { nome: "Cabos", sim: false, nao: false, comentario: "" },
-    { nome: "No-Break", sim: false, nao: false, comentario: "" },
+    { nome: "Teclado", sim: false, nao: false, comentario: "ok" },
+    { nome: "Mouse", sim: false, nao: false, comentario: "ok" },
+    { nome: "Monitor", sim: false, nao: false, comentario: "ok" },
+    { nome: "Cabos", sim: false, nao: false, comentario: "ok" },
+    { nome: "No-Break", sim: false, nao: false, comentario: "ok" },
   ]);
 
-  // Função para carregar os checklists do AsyncStorage
-  const carregarChecklists = async () => {
-    try {
-      const hardwareData = await AsyncStorage.getItem('checklist_hardware');
-      const softwareData = await AsyncStorage.getItem('checklist_software');
-      const perifericosData = await AsyncStorage.getItem('checklist_perifericos');
+  
 
-      if (hardwareData) {
-        const parsedHardware = JSON.parse(hardwareData);
-        setHardware(parsedHardware);
-        console.log("Hardware carregado do AsyncStorage:", parsedHardware);
-      }
-      if (softwareData) {
-        const parsedSoftware = JSON.parse(softwareData);
-        setSoftware(parsedSoftware);
-        console.log("Software carregado do AsyncStorage:", parsedSoftware);
-      }
-      if (perifericosData) {
-        const parsedPerifericos = JSON.parse(perifericosData);
-        setPerifericos(parsedPerifericos);
-        console.log("Periféricos carregado do AsyncStorage:", parsedPerifericos);
-      }
-    } catch (error) {
-      console.error("Erro ao carregar checklists do AsyncStorage:", error);
-      Alert.alert("Erro", "Não foi possível carregar os checklists salvos.");
+
+  // Função para carregar os checklists do useAuth
+ const carregarChecklists = async () => {
+  try {
+    if (checklist_hardware) {
+      const parsedHardware = JSON.parse(checklist_hardware);
+      setHardware(parsedHardware);
+      console.log("Hardware carregado do useAuth:", parsedHardware);
     }
-  };
+    if (checklist_software) {
+      const parsedSoftware = JSON.parse(checklist_software);
+      setSoftware(parsedSoftware);
+      console.log("Software carregado do useAuth:", parsedSoftware);
+    }
+    if (checklist_perifericos) {
+      const parsedPerifericos = JSON.parse(checklist_perifericos);
+      setPerifericos(parsedPerifericos);
+      console.log("Periféricos carregado do useAuth:", parsedPerifericos);
+    }
+  } catch (error) {
+    console.error("Erro ao carregar checklists do useAuth:", error);
+    Alert.alert("Erro", "Não foi possível carregar os checklists salvos.");
+  }
+};
 
-  // Função para buscar os dados pelo ID digitado
+  // Função para buscar os dados pelo chamado digitado
   const buscarRelatorio = async () => {
-    if (!searchId) {
-      Alert.alert("Atenção", "Digite o ID da manutenção.");
+    if (!searchTag) {
+      Alert.alert("Atenção", "Digite o.");
       return;
     }
     setLoading(true);
     try {
       // Buscar manutenção
-      console.log(`Buscando manutenção para o ID: ${searchId}`);
-      const manuResponse = await axios.get(`http://localhost:3000/manurota/manutencoes/${searchId}`);
-      console.log("Resposta da API /manurota/manutencoes:", manuResponse.data);
+      console.log(`Buscando manutenção para o ID: ${searchTag}`);
+      const manuResponse = await axios.get(`http://localhost:3000/manurota/manutencao/servicetag/${searchTag}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Inclui o token no cabeçalho
+          },
+        }
+      );
+      console.log("Resposta da API /manurota/manutencoes:", manuResponse.data,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Inclui o token no cabeçalho
+          },
+        }
+        
+      );
       setManutencao(manuResponse.data);
 
       // Buscar computador
       if (manuResponse.data.id_computador) {
         console.log(`Buscando computador para o ID: ${manuResponse.data.id_computador}`);
-        const compResponse = await axios.get(`http://localhost:3000/compurota/computadores/${manuResponse.data.id_computador}`);
+        const compResponse = await axios.get(`http://localhost:3000/compurota/computadores/${manuResponse.data.id_computador}`,
+          {
+          headers: {
+            Authorization: `Bearer ${token}`, // Inclui o token no cabeçalho
+          },
+        }
+        );
         console.log("Resposta da API /compurota/computadores:", compResponse.data);
         setComputador(compResponse.data);
+        setSoftware((prev) =>
+  prev.map((item) =>
+    item.nome === "Nome do Host"
+      ? { ...item, comentario: compResponse.data.nome_computador || "" }
+      : item
+  )
+);
       } else {
         console.warn("ID do computador não encontrado na manutenção.");
         Alert.alert("Aviso", "ID do computador não encontrado na manutenção.");
@@ -152,10 +187,11 @@ const RelatorioChecklist = () => {
 if (manuResponse.data.id_usuarios) {
   const userResponse = await axios.get(`http://localhost:3000/auterota/usuarios`);
   const usuario = userResponse.data.find((u: any) => u._id === manuResponse.data.id_usuarios);
+  console.log("Usuário encontrado:", usuario); // Adicione este log
   if (usuario) {
-    setTecnico(usuario.nome_usuario);
-    console.log("Técnico encontrado:", usuario.nome_usuario);
-  } else {
+  setTecnico(usuario.nome_usuarios || usuario.nome_usuario || usuario.nome || "(Sem nome)");
+  console.log("Técnico encontrado:", usuario.nome_usuarios || usuario.nome_usuario || usuario.nome || "(Sem nome)");
+} else {
     setTecnico("(Não encontrado)");
     console.warn("Técnico não encontrado para o ID:", manuResponse.data.id_usuarios);
   }
@@ -166,7 +202,7 @@ if (manuResponse.data.id_usuarios) {
 
 
 
-      // Carregar checklists do AsyncStorage
+      // Carregar checklists do useAuth
       await carregarChecklists();
     } catch (error: any) {
       console.error("Erro ao buscar dados:", error.message);
@@ -185,11 +221,11 @@ if (manuResponse.data.id_usuarios) {
 
   // Busca automática se vier ID pela URL
   useEffect(() => {
-    if (searchId) {
+    if (searchTag) {
       buscarRelatorio();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchId]);
+  }, [searchTag]);
 
   // Função para atualizar os campos de checklist
   const atualizarChecklist = (
@@ -238,7 +274,8 @@ if (manuResponse.data.id_usuarios) {
             <tr>
               <td class="cabecalho"><b>Setor:</b> ${computador?.setor || ""}</td>
               <td class="cabecalho"><b>Data:</b> ${manutencao?.data_manutencao || ""}</td>
-              <td class="cabecalho"><b>Nome do Técnico:</b> ${tecnico || "(Preencher manualmente)"}</td>
+              <td class="cabecalho"><b>Nome do Técnico:</b> ${tecnico || ""}</td>
+              <td class="cabecalho"><b>Patrimonio:</b> ${computador?.patrimonio || ""}</td>
             </tr>
             <tr>
               <td class="cabecalho"><b>Fabricante:</b> ${computador?.fabricante || ""}</td>
@@ -277,10 +314,14 @@ if (manuResponse.data.id_usuarios) {
             </tr>
             ${renderRows(perifericos)}
           </table>
-          <div class="assinatura">
-            <p>Elaborado por: ${tecnico || "(Preencher manualmente)"}</p>
-            <p>Aprovado por: ____________________________</p>
-          </div>
+          <table>
+          <tr>
+            <th>FM-TI-001, Rev.00 </th>
+            <th>Elaborado por: Elaborado por: Samuel R. </th>
+            <th>Aprovado por: Evandro D. </th>
+          </tr>
+                  
+            </table>
         </body>
       </html>
     `;
@@ -317,8 +358,8 @@ if (manuResponse.data.id_usuarios) {
               marginRight: 8,
             }}
             placeholder="ID da manutenção"
-            value={searchId}
-            onChangeText={setSearchId}
+            value={searchTag}
+            onChangeText={setsearchTag}
           />
           <Button title="Pesquisar" onPress={buscarRelatorio} color="rgb(4 155 92)" />
         </View>

@@ -161,7 +161,7 @@ const EtiquetaScreen: React.FC = () => {
             <p>Service Tag: ${item.serviceTag}</p>
             <p>Patrimônio: ${item.patrimonio}</p>
             <p>Última Preventiva: ${formatDate(item.ultima_preventiva)}</p>
-            <p><strong>IMPRIMA ETIQUETA</strong></p>
+            
           </div>
         </body>
       </html>
