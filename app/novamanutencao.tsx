@@ -116,37 +116,53 @@ const NManutencao = () => {
   const toggleDatePickerAnterior = () => setShowPickerAnterior(!showPickerAnterior);
   const toggleDatePickerManutencao = () => setShowPickerManutencao(!showPickerManutencao);
 
-  const handleSubmit = async () => {
+ const handleSubmit = async () => {
     if (
-      !criamanu.id_computador ||
-      !criamanu.serviceTag ||
-      !criamanu.setor ||
-      !criamanu.id_usuarios ||
-      !criamanu.chamado ||
-      !criamanu.data_manutencao ||
-      !criamanu.tipo_manutencao ||
-      !criamanu.descricao_manutencao
+        !criamanu.id_computador ||
+        !criamanu.serviceTag ||
+        !criamanu.setor ||
+        !criamanu.id_usuarios ||
+        !criamanu.chamado ||
+        !criamanu.data_manutencao ||
+        !criamanu.tipo_manutencao ||
+        !criamanu.descricao_manutencao
     ) {
-      Alert.alert("Erro", "Por favor, preencha todos os campos obrigatórios.");
-      return;
+        Alert.alert("Erro", "Por favor, preencha todos os campos obrigatórios.");
+        return;
     }
 
     setIsLoading(true);
     try {
-      await axios.post("http://localhost:3000/manurota/criamanutencao", criamanu, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      Alert.alert("Sucesso", "Manutenção criada com sucesso!");
-      router.push(`./tabs/relatorioChecklist?id=${criamanu.serviceTag}` as any);
+        // Create maintenance record
+        await axios.post("http://localhost:3000/manurota/criamanutencao", criamanu, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        // Send email (non-blocking)
+        axios.post("http://localhost:3000/manurota/enviaremail", {
+            
+            subject: ` Nova manutenção cadastrada do PC ${criamanu.serviceTag}. `,
+            text: `Uma nova manutenção foi cadastrada para o computador ${criamanu.serviceTag} por ${nomeUsuario}.`,
+        }, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }).catch((emailError) => {
+            console.error("Failed to send email, but maintenance was created:", emailError);
+            Alert.alert("Aviso", "Manutenção criada, mas houve um erro ao enviar o e-mail.");
+        });
+
+        Alert.alert("Sucesso", "Manutenção criada com sucesso!");
+        router.push(`./tabs/relatorioChecklist?id=${criamanu.serviceTag}` as any);
     } catch (error) {
-      console.error("Erro ao criar manutenção:", error);
-      Alert.alert("Erro", "Não foi possível criar a manutenção. Tente novamente.");
+        console.error("Erro ao criar manutenção:", error);
+        Alert.alert("Erro", "Não foi possível criar a manutenção. Tente novamente.");
     } finally {
-      setIsLoading(false);
+        setIsLoading(false);
     }
-  };
+};
 
   return (
     <Layout>
