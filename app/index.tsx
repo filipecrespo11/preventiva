@@ -1,4 +1,4 @@
-import { Text, View, TouchableOpacity, useWindowDimensions} from "react-native";
+import { Text, View, TouchableOpacity, useWindowDimensions, Image} from "react-native";
 import { Stack, useRouter  } from "expo-router";
 import Layout1 from "./componente/layout1";
 import styles from "./componente/layoutStyles";
@@ -12,7 +12,14 @@ const { width } = useWindowDimensions();
   return (
     <Layout1 showChildren1={width > 600} children1={<AgendaManutencao />}>
       <View>
-        <Stack.Screen options={{ title: "Manutenção Preventiva" }} />
+        <Stack.Screen options={{ title: "",  headerTitle: () => (
+                            <Image
+                                source={require("../assets/images/logo.png")} // ajuste o caminho conforme necessário
+                                style={{ width: 120, height: 40, resizeMode: "contain" }}
+                            />
+                        ),
+                    }}
+                />
 
         <View style={{...styles.containermenu}}>
           <TouchableOpacity style={{...styles.button}} onPress={() => router.push("/login")}>

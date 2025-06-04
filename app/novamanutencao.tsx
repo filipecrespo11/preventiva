@@ -14,7 +14,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Platform,
-  ActivityIndicator,
+  ActivityIndicator, Image
 } from "react-native";
 import styles from "./componente/layoutStyles";
 import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
@@ -166,6 +166,14 @@ const NManutencao = () => {
 
   return (
     <Layout>
+      <Stack.Screen options={{ title: "",  headerTitle: () => (
+                                      <Image
+                                          source={require("../assets/images/logo.png")} // ajuste o caminho conforme necessário
+                                          style={{ width: 120, height: 40, resizeMode: "contain" }}
+                                      />
+                                  ),
+                              }}
+                          />
       <ScrollView>
         <View>
           <Picker

@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, TextInput, Button, Alert, Platform } from "react-native";
+import { View, Text, TextInput, Button, Alert, Platform, Image } from "react-native";
 import { useState } from "react";
 import axios from "axios";
 import { useRouter, Stack } from "expo-router";
@@ -47,7 +47,14 @@ const LoginScreen = () => {
   return (
 <Layout>
     <View>
-      <Stack.Screen options={{ title: "Login" }} />
+      <Stack.Screen options={{ title: "" ,headerTitle: () => (
+                                  <Image
+                                      source={require("../assets/images/logo.png")} // ajuste o caminho conforme necessário
+                                      style={{ width: 120, height: 40, resizeMode: "contain" }}
+                                  />
+                              ),
+                          }}
+                      />
 
 
     <View>

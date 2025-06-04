@@ -3,7 +3,7 @@ import axios from "axios";
 import { useRouter, Stack } from "expo-router";
 import Layout from "../componente/layout";
 import styles from "../componente/layoutStyles";
-import { Button, TextInput, View } from "react-native";
+import { Button, TextInput, View, Image } from "react-native";
 const CadastroScreen = () => {
   const [user, setUser] = useState({
     nome_usuario: "",
@@ -33,7 +33,14 @@ const CadastroScreen = () => {
     <Layout>
     <View>
       
-      <Stack.Screen options={{ title: "Cadastro" }} />
+      <Stack.Screen options={{ title: "" ,headerTitle: () => (
+                                        <Image
+                                            source={require("../../assets/images/logo.png")} // ajuste o caminho conforme necessário
+                                            style={{ width: 120, height: 40, resizeMode: "contain" }}
+                                        />
+                                    ),
+                                }}
+                            />
       
       <View >
         <TextInput

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Button, ScrollView, Alert, Platform, TextInput, TouchableOpacity } from "react-native";
+import { View, Text, Button, ScrollView, Alert, Platform, TextInput, TouchableOpacity, Image } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import * as Print from "expo-print";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import Layout from "../componente/layout";
+import { Stack } from "expo-router"
 
  
 interface ChecklistItem {
@@ -345,6 +346,15 @@ if (manuResponse.data.id_usuarios) {
 
   return (
     <Layout>
+      <Stack.Screen options={{ title: "",  headerTitle: () => (
+                                <Image
+                                    source={require("../../assets/images/logo.png")} // ajuste o caminho conforme necessário
+                                    style={{ width: 120, height: 40, resizeMode: "contain" }}
+                                />
+                            ),
+                        }}
+                    />
+      
       <ScrollView style={{ padding: 10 }}>
         {/* Campo de pesquisa */}
         <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 16 }}>

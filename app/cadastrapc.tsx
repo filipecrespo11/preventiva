@@ -4,7 +4,7 @@ import { useRouter, Stack } from "expo-router";
 import { useAuth } from "./context/AuthContext"; // Importa o contexto de autenticação
 import Layout from "./componente/layout";
 import styles from "./componente/layoutStyles";
-import { Button, TextInput, View, Text, StyleSheet } from "react-native";
+import { Button, TextInput, View, Text, StyleSheet, Image } from "react-native";
 import { Picker } from "@react-native-picker/picker"; // Importa o componente Picker
 
 const CadastropcScreen = () => {
@@ -61,7 +61,14 @@ const CadastropcScreen = () => {
   return (
     <Layout>
       <View>
-        <Stack.Screen options={{ title: "Cadastro de Máquina" }} />
+        <Stack.Screen options={{ title: "" ,headerTitle: () => (
+                                          <Image
+                                              source={require("../assets/images/logo.png")} // ajuste o caminho conforme necessário
+                                              style={{ width: 120, height: 40, resizeMode: "contain" }}
+                                          />
+                                      ),
+                                  }}
+                              />
         <TextInput
           style={{...styles.input}}
           placeholder="Nome do computador"

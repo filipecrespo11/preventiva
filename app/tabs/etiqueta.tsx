@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { View, Text, StyleSheet, Button, FlatList, TextInput, Alert, Platform } from "react-native";
+import { View, Text, StyleSheet, Button, FlatList, TextInput, Alert, Platform, Image } from "react-native";
 import QRCode from "react-native-qrcode-svg";
 import { captureRef } from "react-native-view-shot";
 import * as Sharing from "expo-sharing";
@@ -7,6 +7,7 @@ import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import * as Print from "expo-print";
 import Layout from "../componente/layout";
+import { Stack } from "expo-router";
 
 interface Computador {
   _id: string;
@@ -132,9 +133,13 @@ const EtiquetaScreen: React.FC = () => {
       <html>
         <head>
           <style>
+          @page {
+              size: 90mm 50mm; /* largura x altura */
+              margin: 0;
+            }
             body { font-family: Arial; margin: 0; padding: 10px; }
             .etiqueta {
-              width: 300px;
+              width: 600px;
               border: 2px solid #000;
               padding: 10px;
               margin: 0 auto;
@@ -142,24 +147,20 @@ const EtiquetaScreen: React.FC = () => {
               background-color: #fff;
             }
             h2 { color: #1976d2; font-size: 18px; margin: 0 0 10px; }
-            p { font-size: 14px; margin: 5px 0; }
-            .qr-image { margin: 10px 0; }
+            p { font-size: 20px; margin: 5px 0; }
+            .qr-image { margin: 10px 0; text-align:right }
           </style>
         </head>
         <body>
           <div class="etiqueta">
             <h2>Manutenção Preventiva</h2>
-            <p><strong>Equipamento do Computador</strong></p>
-            ${
+             ${
               qrCodeBase64
                 ? `<img src="${qrCodeBase64}" alt="QR Code" class="qr-image" style="width: 90px; height: 90px;">`
                 : '<p style="font-style: italic; color: #888;">[QR Code não disponível]</p>'
             }
-            <p>Nome: ${item.nome_computador}</p>
-            <p>Fabricante: ${item.fabricante}</p>
-            <p>Modelo: ${item.modelo}</p>
-            <p>Service Tag: ${item.serviceTag}</p>
-            <p>Patrimônio: ${item.patrimonio}</p>
+            <p>Nome: ${item.nome_computador} Fabricante: ${item.fabricante}</p>
+            <p>Modelo: ${item.modelo} Service Tag: ${item.serviceTag} Patrimônio: ${item.patrimonio}</p>
             <p>Última Preventiva: ${formatDate(item.ultima_preventiva)}</p>
             
           </div>
@@ -208,7 +209,14 @@ const EtiquetaScreen: React.FC = () => {
         onChangeText={setServiceTag}
       />
       <Button title="Buscar" onPress={handleSearch} color="rgb(4 155 92)" />
-
+<Stack.Screen options={{ title: "",  headerTitle: () => (
+                                <Image
+                                    source={require("../../assets/images/logo.png")} // ajuste o caminho conforme necessário
+                                    style={{ width: 120, height: 40, resizeMode: "contain" }}
+                                />
+                            ),
+                        }}
+                    />
       {/* Exibir Etiqueta do Item Selecionado */}
       {itemSelecionado && (
         <View ref={etiquetaRef} style={styles.etiquetas}>

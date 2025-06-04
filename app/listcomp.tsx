@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, SafeAreaView, TextInput } from "react-native";
+import { View, Text, FlatList, SafeAreaView, TextInput, Image } from "react-native";
 import axios from "axios";
 import { useRouter, Stack } from "expo-router";
 import { useAuth } from "./context/AuthContext";
@@ -87,6 +87,14 @@ const ListComputadores: React.FC = () => {
   return (
     <SafeAreaView style={{...styles.containerlist}}>
       <Layout>
+        <Stack.Screen options={{ title: "" ,headerTitle: () => (
+                                          <Image
+                                              source={require("../assets/images/logo.png")} // ajuste o caminho conforme necessário
+                                              style={{ width: 120, height: 40, resizeMode: "contain" }}
+                                          />
+                                      ),
+                                  }}
+                              />
          <TextInput
         style={{...styles.input}}
         placeholder="Pesquisar por nome ou Service Tag"

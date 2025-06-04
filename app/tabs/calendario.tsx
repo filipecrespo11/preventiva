@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, SafeAreaView, Alert, Platform, Button } from "react-native";
+import { View, Text, SafeAreaView, Alert, Platform, Button, Image } from "react-native";
 import axios from "axios";
 import { Agenda, Calendar } from "react-native-calendars";
 import { enableScreens} from "react-native-screens";
 import Layout2 from "../componente/layout2";
 import styles from "../componente/layoutStyles";
 import * as Print from "expo-print"; // Se estiver usando Expo
+import { Stack } from "expo-router";
 
 
 
@@ -223,7 +224,39 @@ const exportarRelatorio = async () => {
           )}
         </View>
 
-        {<Agenda
+        
+        
+      </>
+    }
+  >
+<Stack.Screen options={{ title: "",  headerTitle: () => (
+                                <Image
+                                    source={require("../../assets/images/logo.png")} // ajuste o caminho conforme necessário
+                                    style={{ width: 120, height: 40, resizeMode: "contain" }}
+                                />
+                            ),
+                        }}
+                    />
+
+  <Calendar
+            current={selectedDate}
+            onDayPress={(day: CalendarDay) => setSelectedDate(day.dateString)}
+            markedDates={{
+              [selectedDate]: { selected: true, selectedColor: "blue" },
+              // Marcar datas que têm itens
+              ...Object.keys(agendaItems).reduce((acc, date) => {
+                acc[date] = acc[date] || { marked: true };
+                return acc;
+              }, {} as any),
+            }}
+            theme={{
+              selectedDayBackgroundColor: "blue",
+              todayTextColor: "blue",
+              arrowColor: "blue",
+            }}
+          />
+
+          <Agenda
   items={agendaItems}
   selected={selectedDate}
   onDayPress={(day: CalendarDay) => setSelectedDate(day.dateString)}
@@ -275,30 +308,7 @@ const exportarRelatorio = async () => {
   }}
 renderCalendar={() => null} // <-- Adicione esta linha!
 
-/>}
-        
-      </>
-    }
-  >
-
-  <Calendar
-            current={selectedDate}
-            onDayPress={(day: CalendarDay) => setSelectedDate(day.dateString)}
-            markedDates={{
-              [selectedDate]: { selected: true, selectedColor: "blue" },
-              // Marcar datas que têm itens
-              ...Object.keys(agendaItems).reduce((acc, date) => {
-                acc[date] = acc[date] || { marked: true };
-                return acc;
-              }, {} as any),
-            }}
-            theme={{
-              selectedDayBackgroundColor: "blue",
-              todayTextColor: "blue",
-              arrowColor: "blue",
-            }}
-          />
-
+/>
 
 
 

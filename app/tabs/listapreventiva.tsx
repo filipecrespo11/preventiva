@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, SafeAreaView, TextInput, useWindowDimensions } from "react-native";
+import { View, Text, FlatList, SafeAreaView, TextInput, useWindowDimensions, Image } from "react-native";
 import axios from "axios";
 import { Stack } from "expo-router";
 import styles from "../componente/layoutStyles";
@@ -97,6 +97,14 @@ const { width } = useWindowDimensions();
     <SafeAreaView style={{...styles.containerlist}}>
       
      <Layout>
+      <Stack.Screen options={{ title: "" ,headerTitle: () => (
+                                        <Image
+                                            source={require("../../assets/images/logo.png")} // ajuste o caminho conforme necessário
+                                            style={{ width: 120, height: 40, resizeMode: "contain" }}
+                                        />
+                                    ),
+                                }}
+                            />
 
         <TextInput
         style={{...styles.input}}

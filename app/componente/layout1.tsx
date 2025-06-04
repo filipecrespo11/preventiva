@@ -33,7 +33,7 @@ const Layout1: React.FC<LayoutProps1> = ({ children, children1, showChildren1}) 
 
       {/* Rodapé */}
       <footer style={styles.footer}>
-        <p>© 2025 Manutenção Preventiva. Todos os direitos reservados.</p>
+        <p>© 2025 Unimed Campos, Manutenção Preventiva. Todos os direitos reservados.</p>
       </footer>
     </div>
   );

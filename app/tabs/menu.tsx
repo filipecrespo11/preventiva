@@ -1,4 +1,4 @@
-import { Text, View, TouchableOpacity } from "react-native";
+import { Text, View, TouchableOpacity, Image } from "react-native";
 import { Stack, useRouter} from "expo-router";
 import Layout from "../componente/layout";
 import styles from "../componente/layoutStyles";
@@ -13,7 +13,14 @@ export default function Index() {
     <Layout>
 
       <View>
-        <Stack.Screen options={{ title: "Manutenção Preventiva" }} />
+        <Stack.Screen options={{ title: "" ,headerTitle: () => (
+                                          <Image
+                                              source={require("../../assets/images/logo.png")} // ajuste o caminho conforme necessário
+                                              style={{ width: 120, height: 40, resizeMode: "contain" }}
+                                          />
+                                      ),
+                                  }}
+                              />
 
         <View style={{...styles.containermenu}}>
           <TouchableOpacity style={{...styles.button}} onPress={() => router.push("/login")}>
