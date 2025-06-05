@@ -116,13 +116,12 @@ const NManutencao = () => {
   const toggleDatePickerAnterior = () => setShowPickerAnterior(!showPickerAnterior);
   const toggleDatePickerManutencao = () => setShowPickerManutencao(!showPickerManutencao);
 
- const handleSubmit = async () => {
+  const handleSubmit = async () => {
     if (
         !criamanu.id_computador ||
         !criamanu.serviceTag ||
         !criamanu.setor ||
         !criamanu.id_usuarios ||
-        !criamanu.chamado ||
         !criamanu.data_manutencao ||
         !criamanu.tipo_manutencao ||
         !criamanu.descricao_manutencao
@@ -133,24 +132,25 @@ const NManutencao = () => {
 
     setIsLoading(true);
     try {
-        // Create maintenance record
+        // Criar registro de manutenção
         await axios.post("http://localhost:3000/manurota/criamanutencao", criamanu, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         });
 
-        // Send email (non-blocking)
+        // Enviar e-mail (não bloqueante)
         axios.post("http://localhost:3000/manurota/enviaremail", {
-            
-            assunto: ` Nova manutenção cadastrada do PC ${criamanu.serviceTag}. `,
+            destinatario: process.env.URIemailfrom,
+            assunto: `Nova manutenção cadastrada do PC ${criamanu.serviceTag}`,
             texto: `Uma nova manutenção foi cadastrada para o computador ${criamanu.serviceTag} por ${nomeUsuario}.`,
+            serviceTag: criamanu.serviceTag
         }, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         }).catch((emailError) => {
-            console.error("Failed to send email, but maintenance was created:", emailError);
+            console.error("Falha ao enviar e-mail, mas manutenção foi criada:", emailError);
             Alert.alert("Aviso", "Manutenção criada, mas houve um erro ao enviar o e-mail.");
         });
 
@@ -184,7 +184,7 @@ const NManutencao = () => {
               const selectedComputer = computadores.find((computador) => computador._id === value);
               if (selectedComputer) {
                 handleChange("serviceTag", selectedComputer.serviceTag);
-                handleChange("setor", selectedComputer.setor); // Supondo que o setor esteja no objeto computador
+                handleChange("setor", selectedComputer.setor);
               }
             }}
           >
@@ -203,7 +203,7 @@ const NManutencao = () => {
 
           <TextInput
             style={{ ...styles.input }}
-            placeholder="setor"
+            placeholder="Setor"
             value={criamanu.setor}
             onChangeText={(value) => handleChange("setor", value)}
           />
@@ -218,20 +218,15 @@ const NManutencao = () => {
           <Picker
             style={{ ...styles.input }}
             placeholder="Status da Manutenção"
-          selectedValue={criamanu.status_manutencao}
+            selectedValue={criamanu.status_manutencao}
             onValueChange={(itemValue) => handleChange("status_manutencao", itemValue)}>
-
             <Picker.Item label="Selecione o Status da Manutenção" value="" />
             <Picker.Item label="Aguardando Peças" value="Aguardando Peças" />
             <Picker.Item label="Em Andamento" value="Em Andamento" />
             <Picker.Item label="Concluída" value="Concluída" />
             <Picker.Item label="Cancelada" value="Cancelada" />
-                    
-            
-            
-            </Picker>
+          </Picker>
 
-          
           {Platform.OS === "web" ? (
             <input
               type="date"
@@ -260,7 +255,6 @@ const NManutencao = () => {
             </>
           )}
 
-          
           {Platform.OS === "web" ? (
             <input
               type="date"
@@ -295,20 +289,15 @@ const NManutencao = () => {
             selectedValue={criamanu.tipo_manutencao}
             onValueChange={(itemValue) => handleChange("tipo_manutencao", itemValue)}>
             <Picker.Item label="Selecione o Tipo de Manutenção" value="" />
-            <Picker.Item label="Preventiva" value="Preventiva" />     
+            <Picker.Item label="Preventiva" value="Preventiva" />
             <Picker.Item label="Corretiva" value="Corretiva" />
             <Picker.Item label="Atualização" value="Atualização" />
             <Picker.Item label="Limpeza" value="Limpeza" />
             <Picker.Item label="Instalação" value="Instalação" />
             <Picker.Item label="Configuração" value="Configuração" />
-            <Picker.Item label="Reparo" value="Reparo" />   
+            <Picker.Item label="Reparo" value="Reparo" />
             <Picker.Item label="Outros" value="Outros" />
-            
-           
-
-
-            </Picker>
-          
+          </Picker>
 
           <TextInput
             style={{ ...styles.input }}
