@@ -4,7 +4,7 @@ import axios from "axios";
 import { Stack } from "expo-router";
 import styles from "../componente/layoutStyles";
 import Layout from "../componente/layout";
-import AgendaManutencao from "./calendario";
+
 
 
 interface Manutencao {
@@ -24,7 +24,8 @@ interface Manutencao {
 
 const ListMautencao: React.FC = () => {
   const [Manutencao, setManutencao] = useState<Manutencao[]>([]); // Lista de computadores
- 
+  const [searchTerm, setSearchTerm] = useState<string>(""); // Novo estado para pesquisa
+
   
 
   useEffect(() => {
@@ -53,7 +54,12 @@ const ListMautencao: React.FC = () => {
       });
     };
 
- const [searchTerm, setSearchTerm] = useState<string>(""); // Novo estado para pesquisa
+    const filteredManutencao = Manutencao.filter(
+      (item) =>
+        item.serviceTag?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.setor?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
 
   const TableHeader = () => (
     
@@ -115,7 +121,7 @@ const { width } = useWindowDimensions();
       <TableHeader />
       <FlatList 
      
-        data={Manutencao} // The array of items to render
+        data={filteredManutencao} // The array of items to render
         renderItem={renderItem} // The function to render each item
         keyExtractor={(item) => item.chamado} // Unique key for each item
       />
