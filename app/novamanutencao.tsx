@@ -142,7 +142,7 @@ const NManutencao = () => {
         // Enviar e-mail (não bloqueante)
         axios.post("http://localhost:3000/manurota/enviaremail", {
             destinatario: process.env.URIemailfrom,
-            assunto: `Nova manutenção cadastrada do PC ${criamanu.serviceTag}`,
+            assunto: `Nova manutenção cadastrada do PC Com a Service Tag: ${criamanu.serviceTag}`,
             texto: `Uma nova manutenção foi cadastrada para o computador ${criamanu.serviceTag} por ${nomeUsuario}.`,
             serviceTag: criamanu.serviceTag
         }, {

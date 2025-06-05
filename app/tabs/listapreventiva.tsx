@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, SafeAreaView, TextInput, useWindowDimensions, Image } from "react-native";
+import { View, Text, FlatList, SafeAreaView, TextInput, useWindowDimensions, Image, TouchableOpacity } from "react-native";
 import axios from "axios";
-import { Stack } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import styles from "../componente/layoutStyles";
 import Layout from "../componente/layout";
 
@@ -25,7 +25,7 @@ interface Manutencao {
 const ListMautencao: React.FC = () => {
   const [Manutencao, setManutencao] = useState<Manutencao[]>([]); // Lista de computadores
   const [searchTerm, setSearchTerm] = useState<string>(""); // Novo estado para pesquisa
-
+const router = useRouter();
   
 
   useEffect(() => {
@@ -93,7 +93,15 @@ const ListMautencao: React.FC = () => {
       <Text style={[styles.label, { flex: 1 }]}>{item.tipo_manutencao}</Text>
       <Text style={[styles.label, { flex: 1 }]}>{item.descricao_manutencao}</Text>
            
+<TouchableOpacity
+  onPress={() => router.push(`/tabs/editarManutencao?id=${item._id}`)}
+  style={{ backgroundColor: "#1976d2", padding: 6, borderRadius: 4, marginLeft: 4 }}
+>
+  <Text style={{ color: "#fff" }}>Editar</Text>
+</TouchableOpacity>
+
     </View>
+    
   );
 
 
@@ -123,8 +131,9 @@ const { width } = useWindowDimensions();
      
         data={filteredManutencao} // The array of items to render
         renderItem={renderItem} // The function to render each item
-        keyExtractor={(item) => item.chamado} // Unique key for each item
+        keyExtractor={(item) => item._id} // Unique key for each item, assuming _id is unique
       />
+      
       </Layout>
     </SafeAreaView>
   );

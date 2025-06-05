@@ -81,6 +81,7 @@ const ListComputadores: React.FC = () => {
     <Text style={[styles.label, { flex: 1 }]}>{item.unidade}</Text>
     <Text style={[styles.label, { flex: 1 }]}>{item.setor}</Text>
     <Text style={[styles.label, { flex: 1 }]}>{item.estado}</Text>
+    
   </View>
 );
 
