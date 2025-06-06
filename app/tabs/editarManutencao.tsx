@@ -36,7 +36,7 @@ const { token } = useAuth(); // Obtém o token do contexto
 
   const handleUpdate = async () => {
     try {
-      await axios.put(`http://localhost:3000/manut/${id}`, manutencao,  {
+      await axios.put(`http://localhost:3000/manurota/manut/${id}`, manutencao,  {
           headers: {
             Authorization: `Bearer ${token}`, // Inclui o token no cabeçalho
           },
