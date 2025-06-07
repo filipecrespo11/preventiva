@@ -15,7 +15,7 @@ const { token } = useAuth(); // Obtém o token do contexto
   useEffect(() => {
     const fetchManutencao = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/manut/${id}`, {
+        const response = await axios.get(`http://localhost:3000/manurota/manut/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`, // Inclui o token no cabeçalho
           },
