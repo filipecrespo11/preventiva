@@ -52,21 +52,30 @@ const { token } = useAuth(); // Obtém o token do contexto
 
   return (
     <View style={{ padding: 16 }}>
-      <Text style={styles.label}>Service Tag:</Text>
+      
       <TextInput
         style={styles.input}
+        placeholder="Service Tag"
         value={manutencao.serviceTag}
         onChangeText={(v) => handleChange("serviceTag", v)}
       />
-      <Text style={styles.label}>Setor:</Text>
+      <TextInput
+            style={{ ...styles.input }}
+            placeholder="Número do Chamado"
+            value={manutencao.chamado}
+            onChangeText={(value) => handleChange("chamado", value)}
+          />
+      
       <TextInput
         style={styles.input}
+        placeholder="Setor"
         value={manutencao.setor}
         onChangeText={(v) => handleChange("setor", v)}
       />
-      <Text style={styles.label}>Descrição:</Text>
+      
       <TextInput
         style={styles.input}
+        placeholder="Descrição da Manutenção"
         value={manutencao.descricao_manutencao}
         onChangeText={(v) => handleChange("descricao_manutencao", v)}
       />
