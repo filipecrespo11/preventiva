@@ -37,7 +37,7 @@ const styles = {
       
     },
     content: {
-     display: "inline-block",
+     display: "inline-table",
       
       width: "90%",
       maxWidth: "800px", // Limita a largura máxima do conteúdo    

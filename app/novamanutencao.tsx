@@ -55,6 +55,11 @@ const NManutencao = () => {
   const [showPickerManutencao, setShowPickerManutencao] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  // Função para gerar um ID aleatório simples
+  const generateRandomId = () => {
+    return Math.random().toString(36).substring(2, 9);
+  };
+
   useEffect(() => {
     if (token) {
       const decoded: DecodedToken = jwtDecode(token);
@@ -131,20 +136,28 @@ const NManutencao = () => {
     }
 
     setIsLoading(true);
+    const emailId = generateRandomId(); // Gera o ID único para o e-mail
+    let dbManutencaoId = "";
+
     try {
         // Criar registro de manutenção
-        await axios.post("http://localhost:3000/manurota/criamanutencao", criamanu, {
+        const createManuResponse = await axios.post("http://localhost:3000/manurota/criamanutencao", criamanu, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         });
+        // Assumindo que a resposta da criação da manutenção retorna o objeto criado, incluindo seu _id.
+        // Ajuste o caminho se a estrutura da resposta for diferente. Ex: response.data._id ou response.data.id
+        dbManutencaoId = createManuResponse.data.manutencao?._id || createManuResponse.data._id; 
 
         // Enviar e-mail (não bloqueante)
         axios.post("http://localhost:3000/manurota/enviaremail", {
             destinatario: process.env.URIemailfrom,
-            assunto: `Nova manutenção cadastrada do PC Com a Service Tag: ${criamanu.serviceTag}`,
+            assunto: `[ID:${emailId}] Nova manutenção cadastrada do PC Com a Service Tag: ${criamanu.serviceTag}`,
             texto: `Uma nova manutenção foi cadastrada para o computador ${criamanu.serviceTag} por ${nomeUsuario}.`,
-            serviceTag: criamanu.serviceTag
+            serviceTag: criamanu.serviceTag,
+            manutencaoId: dbManutencaoId,      // O _id da manutenção do MongoDB
+            emailSubjectId: emailId            // O ID que está no assunto (opcional no corpo, mas pode ser útil)
         }, {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -155,7 +168,11 @@ const NManutencao = () => {
         });
 
         Alert.alert("Sucesso", "Manutenção criada com sucesso!");
-        router.push(`./tabs/relatorioChecklist?id=${criamanu.serviceTag}` as any);
+        // Se dbManutencaoId for preferível para o relatório em vez de serviceTag:
+        // router.push(`./tabs/relatorioChecklist?id=${dbManutencaoId}` as any); 
+        // Ou mantenha serviceTag se for o identificador esperado pela tela de relatório:
+        router.push(`./tabs/relatorioChecklist?id=${dbManutencaoId}` as any); 
+
     } catch (error) {
         console.error("Erro ao criar manutenção:", error);
         Alert.alert("Erro", "Não foi possível criar a manutenção. Tente novamente.");

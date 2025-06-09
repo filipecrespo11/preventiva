@@ -58,7 +58,7 @@ interface AuthContextType {
   checklist_perifericos?: string;
 
 }
-const { token } = useAuth();
+// const { token } = useAuth(); // Esta linha estava solta e é desnecessária aqui, token é pego abaixo.
 
 const RelatorioChecklist = () => {
     const { token, checklist_hardware, checklist_software, checklist_perifericos } = useAuth();
@@ -135,40 +135,67 @@ const RelatorioChecklist = () => {
   // Função para buscar os dados pelo chamado digitado
   const buscarRelatorio = async () => {
     if (!searchTag) {
-      Alert.alert("Atenção", "Digite o.");
+      Alert.alert("Atenção", "Digite o ID da manutenção ou Service Tag.");
       return;
     }
     setLoading(true);
-    try {
-      // Buscar manutenção
-      console.log(`Buscando manutenção para o ID: ${searchTag}`);
-      const manuResponse = await axios.get(`http://localhost:3000/manurota/manutencao/servicetag/${searchTag}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`, // Inclui o token no cabeçalho
-          },
-        }
-      );
-      console.log("Resposta da API /manurota/manutencoes:", manuResponse.data,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`, // Inclui o token no cabeçalho
-          },
-        }
-        
-      );
-      setManutencao(manuResponse.data);
+    let manutencaoData = null;
 
-      // Buscar computador
-      if (manuResponse.data.id_computador) {
-        console.log(`Buscando computador para o ID: ${manuResponse.data.id_computador}`);
-        const compResponse = await axios.get(`http://localhost:3000/compurota/computadores/${manuResponse.data.id_computador}`,
-          {
+    try {
+      // Tenta buscar por Service Tag primeiro
+      console.log(`Tentando buscar manutenção pela Service Tag: ${searchTag}`);
+      const responseServiceTag = await axios.get(`http://localhost:3000/manurota/manutencao/servicetag/${searchTag}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      manutencaoData = responseServiceTag.data;
+      console.log("Manutenção encontrada via Service Tag:", manutencaoData);
+    } catch (errorServiceTag: any) {
+      console.warn(`Falha ao buscar por Service Tag (${searchTag}): ${errorServiceTag.message}`);
+      if (errorServiceTag.response && errorServiceTag.response.status === 404) {
+        try {
+          console.log(`Tentando buscar manutenção pelo ID: ${searchTag}`);
+          // Usando a rota similar à de editarManutencao para buscar por ID
+          const responseId = await axios.get(`http://localhost:3000/manurota/manut/${searchTag}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          manutencaoData = responseId.data;
+          console.log("Manutenção encontrada via ID:", manutencaoData);
+        } catch (errorId: any) {
+          console.error(`Falha ao buscar por ID (${searchTag}) também: ${errorId.message}`);
+          if (errorId.response) {
+            console.error("Detalhes do erro na resposta (ID):", errorId.response.data, "Status:", errorId.response.status);
+          }
+          // O erro será tratado no bloco if (!manutencaoData) abaixo
+        }
+      } else {
+        console.error("Erro não tratado ao buscar por Service Tag:", errorServiceTag.message);
+        if (errorServiceTag.response) {
+            console.error("Detalhes do erro na resposta (Service Tag):", errorServiceTag.response.data, "Status:", errorServiceTag.response.status);
+        }
+         // O erro será tratado no bloco if (!manutencaoData) abaixo
+      }
+    }
+
+    if (!manutencaoData) {
+      Alert.alert("Erro", "Nenhuma manutenção encontrada com o identificador fornecido.");
+      setManutencao(null);
+      setComputador(null);
+      setTecnico(null);
+      setLoading(false);
+      return;
+    }
+
+    setManutencao(manutencaoData);
+
+    // Continuar com a busca de computador e técnico
+    try {
+      if (manutencaoData.id_computador) {
+        console.log(`Buscando computador para o ID: ${manutencaoData.id_computador}`);
+        const compResponse = await axios.get(`http://localhost:3000/compurota/computadores/${manutencaoData.id_computador}`, {
           headers: {
             Authorization: `Bearer ${token}`, // Inclui o token no cabeçalho
           },
-        }
-        );
+        });
         console.log("Resposta da API /compurota/computadores:", compResponse.data);
         setComputador(compResponse.data);
         setSoftware((prev) =>
@@ -184,37 +211,37 @@ const RelatorioChecklist = () => {
         setComputador(null);
       }
 
-     // Buscar nome do técnico
-if (manuResponse.data.id_usuarios) {
-  const userResponse = await axios.get(`http://localhost:3000/auterota/usuarios`);
-  const usuario = userResponse.data.find((u: any) => u._id === manuResponse.data.id_usuarios);
-  console.log("Usuário encontrado:", usuario); // Adicione este log
-  if (usuario) {
-  setTecnico(usuario.nome_usuarios || usuario.nome_usuario || usuario.nome || "(Sem nome)");
-  console.log("Técnico encontrado:", usuario.nome_usuarios || usuario.nome_usuario || usuario.nome || "(Sem nome)");
-} else {
-    setTecnico("(Não encontrado)");
-    console.warn("Técnico não encontrado para o ID:", manuResponse.data.id_usuarios);
-  }
-} else {
-  setTecnico("(Não encontrado)");
-  console.warn("ID de usuário não encontrado na manutenção.");
-}
-
-
+      if (manutencaoData.id_usuarios) {
+        const userResponse = await axios.get(`http://localhost:3000/auterota/usuarios`, {
+            headers: { Authorization: `Bearer ${token}` }, // Adicionado header de autorização
+        });
+        const usuarioEncontrado = userResponse.data.find((u: any) => u._id === manutencaoData.id_usuarios);
+        console.log("Usuário encontrado (lista completa):", userResponse.data);
+        console.log("Tentando encontrar ID:", manutencaoData.id_usuarios);
+        console.log("Usuário correspondente:", usuarioEncontrado);
+        if (usuarioEncontrado) {
+          setTecnico(usuarioEncontrado.nome_usuarios || usuarioEncontrado.nome_usuario || usuarioEncontrado.nome || "(Sem nome)");
+          console.log("Técnico definido como:", usuarioEncontrado.nome_usuarios || usuarioEncontrado.nome_usuario || usuarioEncontrado.nome || "(Sem nome)");
+        } else {
+          setTecnico("(Não encontrado)");
+          console.warn("Técnico não encontrado para o ID:", manutencaoData.id_usuarios);
+        }
+      } else {
+        setTecnico("(Não encontrado)");
+        console.warn("ID de usuário não encontrado na manutenção.");
+      }
 
       // Carregar checklists do useAuth
       await carregarChecklists();
     } catch (error: any) {
-      console.error("Erro ao buscar dados:", error.message);
+      console.error("Erro ao buscar dados secundários (computador/técnico/checklists):", error.message);
       if (error.response) {
         console.error("Detalhes do erro na resposta:", error.response.data);
         console.error("Status do erro:", error.response.status);
       }
-      Alert.alert("Erro", "Não foi possível carregar os dados do relatório. Verifique o console para mais detalhes.");
-      setManutencao(null);
-      setComputador(null);
-      setTecnico(null);
+      Alert.alert("Erro", "Não foi possível carregar todos os dados do relatório. Verifique o console para mais detalhes.");
+      // Mantém os dados da manutenção se foram carregados, mas outros podem estar nulos ou com erro.
+      // Ex: setComputador(null); setTecnico(null); // se quiser resetá-los em caso de erro aqui.
     } finally {
       setLoading(false);
     }
@@ -367,7 +394,7 @@ if (manuResponse.data.id_usuarios) {
               flex: 1,
               marginRight: 8,
             }}
-            placeholder="ID da manutenção"
+            placeholder="ID da manutenção ou Service Tag"
             value={searchTag}
             onChangeText={setsearchTag}
           />

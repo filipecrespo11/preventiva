@@ -63,7 +63,7 @@ const router = useRouter();
 
   const TableHeader = () => (
     
-  <View style={{  flexDirection: "row", borderBottomWidth: 1, borderColor: "#e0e0e0", padding: 8  }}>
+  <View style={{  flexDirection: "row", borderColor: "#e0e0e0", padding: 8  }}>
    
     <Text style={[styles.label, { flex: 1, fontWeight: "bold" }]}>Service Tag: </Text>
     <Text style={[styles.label, { flex: 1, fontWeight: "bold" }]}>Setor: </Text>
@@ -82,7 +82,7 @@ const router = useRouter();
   
 
   const renderItem = ({ item }: { item: Manutencao }) => (
-   <View> <View style={{ flexDirection: "row", borderBottomWidth: 1, borderColor: "#e0e0e0", padding: 8 }}>
+    <View style={{ flexDirection: "row", borderBottomWidth: 1, borderColor: "#e0e0e0", padding: 8 }}>
     
       <Text style={[styles.label, { flex: 1 }]}>{item.serviceTag}</Text>
       <Text style={[styles.label, { flex: 1 }]}>{item.setor}</Text>
@@ -94,17 +94,17 @@ const router = useRouter();
       <Text style={[styles.label, { flex: 1 }]}>{item.tipo_manutencao}</Text>
       <Text style={[styles.label, { flex: 1 }]}>{item.descricao_manutencao}</Text>
            
-           <View>
+         
       <TouchableOpacity
   onPress={() => router.push(`/tabs/editarManutencao?id=${item._id}`)}
   style={{ backgroundColor: "#1976d2", padding: 6, borderRadius: 4, marginLeft: 4 }}
 >
   <Text style={{ color: "#fff" }}>Editar</Text>
 </TouchableOpacity>
-</View>
 
 
-    </View>
+
+   
     </View>
 
    
