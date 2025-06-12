@@ -8,6 +8,8 @@ import { Button, TextInput, View, Text, StyleSheet, Image } from "react-native";
 import { Picker } from "@react-native-picker/picker"; // Importa o componente Picker
 
 const urlink = process.env.EXPO_PUBLIC_URI_HOST;
+const setoruri = process.env.SETORESURI;
+
 
 const CadastropcScreen = () => {
   const { token } = useAuth(); // Obtém o token do contexto
@@ -24,7 +26,7 @@ const CadastropcScreen = () => {
 
   const [unidades] = useState<string[]>(["Hospital", "Operadora"]); // Lista de unidades
   const [setores] = useState<{ [key: string]: string[] }>({
-    Hospital: ["TI", "Posto A", "Posto B", "imagem", "Farmácia"], // Setores por unidade
+    Hospital: ["Bio Med Corredores", "Hotelaria", "Sala de Treinamento", "Telefonia", "Sala de Laudos (Antiga Marcação de Exames)", "Sala de Laudos", "Endoscopia", "Colonoscopia", "Oncologia", "Agência Transfusional (1º Andar)", "Agência Transfusional (Térreo)", "Coordenação de Enfermagem PA", "Cuidados Paliativos", "Centro Cirúrgico", "Núcleo OPME", "CME", "Coordenação de Enfermagem", "C.D.U (Guichês)", "C.D.U (Entrega)", "Raio-X", "Mamografia", "Tomografia", "Ultrassom", "Manutenção Hospitalar", "Gestão de Pessoas", "Coordenação CDU", "Repouso Pediátrico", "Farmácia P.A", "Supervisão de Enfermagem 1° Andar", "Processos e Qualidade", "CAF 2º andar", "Marcação de Exames CDU", "Arquivo HGU", "Day Clinic", "Farmácia do Centro Cirúrgico", "UTI Adulto 01", "TI (Infra)", "Almoxarifado", "UTI Adulto 02", "Atendo", "Sala de Reunião HGU", "Secretaria da Direção", "Recepção Adulto", "Posto 2B Anexo", "Coord. Atendimento", "Prescrição 2º andar", "SESMT (Corredor Faturamento)", "SESMT (RH)", "Classificação Ped. I e II", "Recepção Pediátrica", "Recepção Internação", "Puericultura", "Hall do Elevador", "Hall da Imagem", "Consultórios da Emergência", "TI (Sistemas)", "Enfermagem 2C", "Enfermagem 2A", "Posto de Enfermagem do 1º Andar", "Posto P.A", "Mal Subito", "Enfermagem 2º B", "Serviço Social", "CCIH", "Triagem Adulto - 01 e 02", "Coord. Enf. UTI Adulto", "Fisioterapia UTI Adulto", "Sala dos Cooperados", "Repouso Médico - UTI NEO", "UTI Neo", "Farmácia Central", "Faturamento", "Autorização de Guias", "Nutrição", "Estoque da Nutrição", "Prescrição 1º andar", "Painéis e Totens MV", "Cozinha", "Guarita Lateral"], // Setores por unidade
     Operadora: ["Administração", "Financeiro", "RH"],
   }); // Setores por unidade
   const [selectedUnidade, setSelectedUnidade] = useState<string>(""); // Unidade selecionada
