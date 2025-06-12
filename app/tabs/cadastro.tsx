@@ -4,6 +4,10 @@ import { useRouter, Stack } from "expo-router";
 import Layout from "../componente/layout";
 import styles from "../componente/layoutStyles";
 import { Button, TextInput, View, Image } from "react-native";
+
+const urlink = process.env.EXPO_PUBLIC_URI_HOST;
+
+
 const CadastroScreen = () => {
   const [user, setUser] = useState({
     nome_usuario: "",
@@ -21,7 +25,7 @@ const CadastroScreen = () => {
   const handleSubmit = async () => {
    
     try {
-      await axios.post("http://localhost:3000/auterota/criausuarios", user);
+      await axios.post(`${urlink}/auterota/criausuarios`, user);
       router.push("/login"); // Redirect to login page after successful registration
 
     } catch (error) {

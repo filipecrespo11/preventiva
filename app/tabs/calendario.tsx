@@ -9,7 +9,7 @@ import * as Print from "expo-print"; // Se estiver usando Expo
 import { Stack } from "expo-router";
 
 
-
+const urlink = process.env.EXPO_PUBLIC_URI_HOST;
 
 interface Manutencao {
   id_computador: string;
@@ -44,7 +44,7 @@ const AgendaManutencao: React.FC = () => {
 useEffect(() => {
   const fetchManutencoes = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/manurota/manutencoes");
+      const response = await axios.get(`${urlink}/manurota/manutencoes`);
       const data = response.data;
 
       // Gera itens para a data atual e para a próxima manutenção (1 ano depois)

@@ -5,6 +5,8 @@ import { useRouter, useLocalSearchParams } from "expo-router";
 import styles from "../componente/layoutStyles";
 import { useAuth } from "../context/AuthContext";
 
+const urlink = process.env.EXPO_PUBLIC_URI_HOST;
+
 
 const EditarManutencao = () => {
   const router = useRouter();
@@ -15,7 +17,7 @@ const { token } = useAuth(); // Obtém o token do contexto
   useEffect(() => {
     const fetchManutencao = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/manurota/manut/${id}`, {
+        const response = await axios.get(`${urlink}/manurota/manut/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`, // Inclui o token no cabeçalho
           },
@@ -36,7 +38,7 @@ const { token } = useAuth(); // Obtém o token do contexto
 
   const handleUpdate = async () => {
     try {
-      await axios.put(`http://localhost:3000/manurota/manut/${id}`, manutencao,  {
+      await axios.put(`${urlink}/manurota/manut/${id}`, manutencao,  {
           headers: {
             Authorization: `Bearer ${token}`, // Inclui o token no cabeçalho
           },

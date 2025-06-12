@@ -19,6 +19,9 @@ import {
 import styles from "./componente/layoutStyles";
 import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 
+
+const urlink = process.env.EXPO_PUBLIC_URI_HOST;
+
 interface DecodedToken {
   id: string;
   nome: string;
@@ -71,7 +74,7 @@ const NManutencao = () => {
   useEffect(() => {
     const fetchComputadores = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/compurota/computadores", {
+        const response = await axios.get(`${urlink}/compurota/computadores`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -141,7 +144,7 @@ const NManutencao = () => {
 
     try {
         // Criar registro de manutenção
-        const createManuResponse = await axios.post("http://localhost:3000/manurota/criamanutencao", criamanu, {
+        const createManuResponse = await axios.post(`${urlink}/manurota/criamanutencao`, criamanu, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -151,7 +154,7 @@ const NManutencao = () => {
         dbManutencaoId = createManuResponse.data.manutencao?._id || createManuResponse.data._id; 
 
         // Enviar e-mail (não bloqueante)
-        axios.post("http://localhost:3000/manurota/enviaremail", {
+        axios.post(`${urlink}/manurota/enviaremail`, {
             destinatario: process.env.URIemailfrom,
             assunto: `[ID:${emailId}] Nova manutenção cadastrada do PC Com a Service Tag: ${criamanu.serviceTag}`,
             texto: `Uma nova manutenção foi cadastrada para o computador ${criamanu.serviceTag} por ${nomeUsuario}.`,

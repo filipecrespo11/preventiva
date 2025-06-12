@@ -7,7 +7,8 @@ import { useAuth } from "../context/AuthContext";
 import Layout from "../componente/layout";
 import { Stack } from "expo-router"
 
- 
+const urlink = process.env.EXPO_PUBLIC_URI_HOST; 
+
 interface ChecklistItem {
   nome: string;
   sim: boolean;
@@ -144,7 +145,7 @@ const RelatorioChecklist = () => {
     try {
       // Tenta buscar por Service Tag primeiro
       console.log(`Tentando buscar manutenção pela Service Tag: ${searchTag}`);
-      const responseServiceTag = await axios.get(`http://localhost:3000/manurota/manutencao/servicetag/${searchTag}`, {
+      const responseServiceTag = await axios.get(`${urlink}/manurota/manutencao/servicetag/${searchTag}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       manutencaoData = responseServiceTag.data;
@@ -155,7 +156,7 @@ const RelatorioChecklist = () => {
         try {
           console.log(`Tentando buscar manutenção pelo ID: ${searchTag}`);
           // Usando a rota similar à de editarManutencao para buscar por ID
-          const responseId = await axios.get(`http://localhost:3000/manurota/manut/${searchTag}`, {
+          const responseId = await axios.get(`${urlink}/manurota/manut/${searchTag}`, {
             headers: { Authorization: `Bearer ${token}` },
           });
           manutencaoData = responseId.data;
@@ -191,7 +192,7 @@ const RelatorioChecklist = () => {
     try {
       if (manutencaoData.id_computador) {
         console.log(`Buscando computador para o ID: ${manutencaoData.id_computador}`);
-        const compResponse = await axios.get(`http://localhost:3000/compurota/computadores/${manutencaoData.id_computador}`, {
+        const compResponse = await axios.get(`${urlink}/compurota/computadores/${manutencaoData.id_computador}`, {
           headers: {
             Authorization: `Bearer ${token}`, // Inclui o token no cabeçalho
           },
@@ -212,7 +213,7 @@ const RelatorioChecklist = () => {
       }
 
       if (manutencaoData.id_usuarios) {
-        const userResponse = await axios.get(`http://localhost:3000/auterota/usuarios`, {
+        const userResponse = await axios.get(`${urlink}/auterota/usuarios`, {
             headers: { Authorization: `Bearer ${token}` }, // Adicionado header de autorização
         });
         const usuarioEncontrado = userResponse.data.find((u: any) => u._id === manutencaoData.id_usuarios);

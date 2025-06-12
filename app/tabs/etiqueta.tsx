@@ -9,6 +9,8 @@ import * as Print from "expo-print";
 import Layout from "../componente/layout";
 import { Stack } from "expo-router";
 
+const urlink = process.env.EXPO_PUBLIC_URI_HOST;
+
 interface Computador {
   _id: string;
   nome_computador: string;
@@ -35,7 +37,7 @@ const EtiquetaScreen: React.FC = () => {
   useEffect(() => {
     const fetchComputadores = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/compurota/computadores", {
+        const response = await axios.get(`${urlink}/compurota/computadores`, {
           headers: {
             Authorization: `Bearer ${token}`, // Inclui o token no cabeçalho
           },
@@ -49,7 +51,7 @@ const EtiquetaScreen: React.FC = () => {
 
     const fetchManutencoes = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/manurota/manutencoes");
+        const response = await axios.get(`${urlink}/manurota/manutencoes`);
         setManutencoes(response.data);
       } catch (error) {
         console.error("Erro ao buscar manutenções:", error);

@@ -5,7 +5,7 @@ import { Stack, useRouter } from "expo-router";
 import styles from "../componente/layoutStyles";
 import Layout from "../componente/layout";
 
-
+const urlink = process.env.EXPO_PUBLIC_URI_HOST;
 
 interface Manutencao {
     _id: string; // ID do documento
@@ -32,7 +32,7 @@ const router = useRouter();
     // Função para buscar a lista de computadores
     const fetchManutecao = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/manurota/manutencoes");
+        const response = await axios.get(`${urlink}/manurota/manutencoes`);
         setManutencao(response.data); // Supondo que o backend retorne uma lista de computadores
       } catch (error) {
         console.error("Erro ao buscar Manuteções:", error);

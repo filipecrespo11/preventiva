@@ -7,7 +7,7 @@ import styles from "./componente/layoutStyles";
 import { Picker } from "@react-native-picker/picker";
 import Layout from "./componente/layout";
 
-const urlink = process.env.URIhost ;
+const urlink = process.env.EXPO_PUBLIC_URI_HOST;
 
 interface Computador {
   _id: string;
@@ -40,7 +40,7 @@ const ListComputadores: React.FC = () => {
     // Função para buscar a lista de computadores
     const fetchComputadores = async () => {
       try {
-        const response = await axios.get('${urlink}/compurota/computadores', {
+        const response = await axios.get(`${urlink}/compurota/computadores`, {
           headers: {
             Authorization: `Bearer ${token}`, // Inclui o token no cabeçalho
           },

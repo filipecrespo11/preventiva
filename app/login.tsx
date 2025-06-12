@@ -6,6 +6,7 @@ import { useRouter, Stack } from "expo-router";
 import { useAuth } from "./context/AuthContext";
 import Layout from "./componente/layout";
 
+const urlink = process.env.EXPO_PUBLIC_URI_HOST;
 
 const LoginScreen = () => {
   const { setToken } = useAuth(); // Obtém o setToken do contexto
@@ -24,7 +25,7 @@ const LoginScreen = () => {
 
   const handleSubmit = async () => {
     try {
-      const response = await axios.post("http://localhost:3000/auterota/login", user);
+      const response = await axios.post(`${urlink}/auterota/login`, user);
       if (response.status === 200) {
         console.log("Login successful"), Alert.alert("Login bem-sucedido!");
       

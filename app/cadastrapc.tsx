@@ -7,6 +7,8 @@ import styles from "./componente/layoutStyles";
 import { Button, TextInput, View, Text, StyleSheet, Image } from "react-native";
 import { Picker } from "@react-native-picker/picker"; // Importa o componente Picker
 
+const urlink = process.env.EXPO_PUBLIC_URI_HOST;
+
 const CadastropcScreen = () => {
   const { token } = useAuth(); // Obtém o token do contexto
   const [criapc, setUser] = useState({
@@ -44,7 +46,7 @@ const CadastropcScreen = () => {
 
     try {
       await axios.post(
-        "http://localhost:3000/compurota/criacomputador",
+        `${urlink}/compurota/criacomputador`,
         criapc,
         {
           headers: {
