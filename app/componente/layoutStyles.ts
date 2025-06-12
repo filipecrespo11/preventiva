@@ -1,11 +1,14 @@
 
+import { StyleSheet, Dimensions } from 'react-native';
+
+const { height } = Dimensions.get('window');
 
 const styles = {
 
     
 
     container: {
-      display: "flex",
+      flex: 1,
       flexDirection: "column" as const,
       minHeight: "90vh", // Garante que o layout ocupe toda a altura da janela
       backgroundColor: "#ffffff", // Cor de fundo clara
@@ -19,10 +22,16 @@ const styles = {
       padding: "10px",
       textAlign: "center" as const,
       boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)", // Sombra leve para o cabeçalho
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,  
+      elevation: 3,
     },
     body: {
+      flex: 1,
       backgroundColor: "rgba(165, 56, 56, 0.74)", // Cor de fundo clara
       overflow: "auto",
+      
       
     },
     main: {
@@ -55,7 +64,8 @@ const styles = {
     borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 10,
-    marginBottom: 20
+    marginBottom: 20,
+     backgroundColor: '#fff', // Garante fundo branco para inputs
   },
     
     footer: {
@@ -64,17 +74,19 @@ const styles = {
       textAlign: "center" as const,
       padding: "10px",
       marginTop: "auto", // Garante que o rodapé fique na parte inferior
+      
     },
 
 //lista 
 
     label: {
-        padding: 15,
+        padding: 8,
         color: "#343a40",
         shadowOpacity: 0.1,
         shadowRadius: 4,
         backgroundColor: "#ffffff",
         marginBottom: 10,
+       
       },
 
       item: {
@@ -93,7 +105,11 @@ const styles = {
         paddingBottom: 20,
     },
     title: {
-        marginBottom: 20,
+         fontSize: 18, // Adicionado tamanho de fonte
+    fontWeight: 'bold', // Títulos geralmente são em negrito
+    marginBottom: 20,
+    textAlign: 'center',
+
         
       
       },
@@ -104,7 +120,7 @@ const styles = {
       containerlist: {
     
         flex: 1,
-        padding: 20,
+        padding: 10,
       },
 
       //menu
@@ -116,30 +132,35 @@ const styles = {
       button: {
         backgroundColor: "rgb(4 155 92)",
         padding: 15,
-        
+         borderRadius: 5, // Adicionado borderRadius
         marginBottom: 10,
-        
+        paddingVertical: 12, // Ajustado padding
+    paddingHorizontal: 15,
       },
       buttonText: {
         color: "#fff",
-       
+        fontSize: 16, // Adicionado tamanho de fonte
+    
       },
 
       //etiqueta
       etiquetas: {
-        width: 200,
-        height: 100,
-        backgroundColor: "#fff",
-        
-        
-        borderWidth: 1,
-       
-        marginBottom: 20,
+    marginTop: 20,
+    padding: 20,
+    backgroundColor: "#ffffff",
+    borderRadius: 8,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+    alignItems: "center",
       },
 
       info: {
         fontSize: 14,
         marginTop: 5,
+            textAlign: 'center', // Centraliza texto da info
       },
 
 
