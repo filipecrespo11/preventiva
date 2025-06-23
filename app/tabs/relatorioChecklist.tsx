@@ -383,7 +383,7 @@ const RelatorioChecklist = () => {
                         }}
                     />
       
-      <ScrollView style={{ padding: 10 }}>
+      <ScrollView style={{ padding: 10 }} contentContainerStyle={{ paddingBottom: 120 }}>
         {/* Campo de pesquisa */}
         <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 16 }}>
           <TextInput

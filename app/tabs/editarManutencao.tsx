@@ -5,6 +5,7 @@ import { useRouter, useLocalSearchParams } from "expo-router";
 import styles from "../componente/layoutStyles";
 import { useAuth } from "../context/AuthContext";
 import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
+import Layout from "../componente/layout";
 
 const urlink = process.env.EXPO_PUBLIC_URI_HOST;
 
@@ -91,6 +92,7 @@ const { token } = useAuth(); // Obtém o token do contexto
   
 
   return (
+    <Layout>   
     <View style={{ padding: 16 }}>
       
       <TextInput
@@ -179,6 +181,7 @@ const { token } = useAuth(); // Obtém o token do contexto
       <Button title="Salvar" onPress={handleUpdate} />
       <Button title="Cancelar" onPress={() => router.back()} />
     </View>
+    </Layout>
   );
 };
 

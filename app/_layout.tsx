@@ -1,10 +1,11 @@
-import { AuthProvider } from "./context/AuthContext";
+import { AuthProvider, useAuth } from "./context/AuthContext";
 import { Image, View, Text, TouchableOpacity } from "react-native";
 import { Drawer } from "expo-router/drawer";
 import { useRouter } from "expo-router";
 
 function CustomDrawerContent(props: any) {
   const router = useRouter();
+  const { token } = useAuth();
   const activeRoute = props.state.routeNames[props.state.index];
   return (
     <View style={{ flex: 1, paddingTop: 40, backgroundColor: "#f7f7fa" }}>
@@ -32,6 +33,14 @@ function CustomDrawerContent(props: any) {
       >
         <Text style={{ color: activeRoute === "listapreventiva" ? "#fff" : "#222C36", fontSize: 18, fontWeight: "600" }}>Lista Preventiva</Text>
       </TouchableOpacity>
+      {token && (
+        <TouchableOpacity
+          style={{ padding: 16, borderRadius: 8, marginBottom: 8, backgroundColor: activeRoute === "menu" ? "#1976d2" : "transparent" }}
+          onPress={() => router.push("/tabs/menu")}
+        >
+          <Text style={{ color: activeRoute === "menu" ? "#fff" : "#222C36", fontSize: 18, fontWeight: "600" }}>Menu</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 }
@@ -71,6 +80,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Drawer.Screen name="index" options={{ title: "Home" }} />
         <Drawer.Screen name="login" options={{ title: "Login" }} />
         <Drawer.Screen name="listapreventiva" options={{ title: "Lista Preventiva" }} />
+        <Drawer.Screen name="menu" options={{ title: "Menu" }} />
       </Drawer>
     </AuthProvider>
   );

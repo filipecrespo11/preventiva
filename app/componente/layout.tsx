@@ -28,7 +28,14 @@ const Layout: React.FC<LayoutProps> = ({ children}) => {
       
 
       {/* Rodapé */}
-      <footer style={styles.footer}>
+       <footer style={{
+        ...styles.footer,
+        position: "fixed",
+        left: 0,
+        bottom: 0,
+        width: "100%",
+        zIndex: 100,
+      }}>
         <p>© 2025 Unimed Campos, Manutenção Preventiva. Todos os direitos reservados.</p>
       </footer>
     </div>

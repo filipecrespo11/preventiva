@@ -115,7 +115,7 @@ const router = useRouter();
 const { width } = useWindowDimensions();
   return (
     
-    <SafeAreaView style={{...styles.containerlist}}>
+    <SafeAreaView style={{...styles.containerlist, flex: 1}}>
       
      <Layout>
       <Stack.Screen options={{ title: "" ,headerTitle: () => (
@@ -135,10 +135,10 @@ const { width } = useWindowDimensions();
       />
       <TableHeader />
       <FlatList 
-     
         data={filteredManutencao} // The array of items to render
         renderItem={renderItem} // The function to render each item
         keyExtractor={(item) => item._id} // Unique key for each item, assuming _id is unique
+        contentContainerStyle={{ paddingBottom: 120 }} // espaço extra para o rodapé
       />
       
       </Layout>

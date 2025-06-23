@@ -260,9 +260,62 @@ const AgendaManutencao: React.FC = () => {
   });
 
   return (
-    <Layout2
-      children1={
-        <>
+    <Layout2>
+      <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "flex-start", minHeight: 400, marginTop: 24 }}>
+        {/* Coluna do calendário */}
+        <View style={{
+          backgroundColor: "#fff",
+          borderRadius: 16,
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 4 },
+          shadowOpacity: 0.08,
+          shadowRadius: 16,
+          elevation: 4,
+          padding: 32,
+          minWidth: 400,
+          maxWidth: 480,
+          alignItems: "center",
+          position: "relative",
+          top: 0,
+          height: "auto",
+          marginRight: 40,
+        }}>
+          <Calendar
+            current={selectedDate}
+            onDayPress={(day: CalendarDay) => setSelectedDate(day.dateString)}
+            markedDates={{
+              [selectedDate]: { selected: true, selectedColor: "#1976d2" },
+              ...Object.keys(agendaItems).reduce((acc, date) => {
+                acc[date] = acc[date] || { marked: true };
+                return acc;
+              }, {} as any),
+            }}
+            style={{ width: 360, minHeight: 420, fontSize: 20 }}
+            theme={{
+              calendarBackground: "#fff",
+              selectedDayBackgroundColor: "#1976d2",
+              todayTextColor: "#1976d2",
+              arrowColor: "#1976d2",
+              textDayFontSize: 18,
+              textMonthFontSize: 22,
+              textDayHeaderFontSize: 16,
+            }}
+          />
+        </View>
+        {/* Coluna do conteúdo principal */}
+        <View style={{
+          backgroundColor: "#fff",
+          borderRadius: 16,
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 4 },
+          shadowOpacity: 0.08,
+          shadowRadius: 16,
+          elevation: 4,
+          padding: 32,
+          minWidth: 400,
+          maxWidth: 600,
+          flex: 1,
+        }}>
           {/* Filtros de período */}
           <View style={localStyles.filterRow}>
             <Text style={{ fontWeight: "bold", fontSize: 15 }}>Início:</Text>
@@ -350,32 +403,14 @@ const AgendaManutencao: React.FC = () => {
               <Text style={localStyles.noDataText}>Nenhuma manutenção agendada para este dia.</Text>
             )}
           </View>
-        </>
-      }
-    >
+        </View>
+      </View>
       <Stack.Screen options={{ title: "", headerTitle: () => (
         <Image
           source={require("../../assets/images/logo.png")}
           style={{ width: 120, height: 40, resizeMode: "contain" }}
         />
       ), }} />
-
-      <Calendar
-        current={selectedDate}
-        onDayPress={(day: CalendarDay) => setSelectedDate(day.dateString)}
-        markedDates={{
-          [selectedDate]: { selected: true, selectedColor: "#1976d2" },
-          ...Object.keys(agendaItems).reduce((acc, date) => {
-            acc[date] = acc[date] || { marked: true };
-            return acc;
-          }, {} as any),
-        }}
-        theme={{
-          selectedDayBackgroundColor: "#1976d2",
-          todayTextColor: "#1976d2",
-          arrowColor: "#1976d2",
-        }}
-      />
     </Layout2>
   );
 };

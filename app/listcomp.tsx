@@ -115,6 +115,7 @@ const ListComputadores: React.FC = () => {
         )} // Filtra por unidade, setor, nome ou service tag
         renderItem={renderItem}
         keyExtractor={(item) => item._id}
+        contentContainerStyle={{ paddingBottom: 120 }} // espaço extra para o rodapé
       />
 
 </Layout>
