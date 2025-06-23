@@ -1,6 +1,7 @@
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Text, View, TouchableOpacity, useWindowDimensions, Image} from "react-native";
 import { Stack, useRouter  } from "expo-router";
-import Layout1 from "./componente/layout1";
+import Layout from "./componente/layout";
 import styles from "./componente/layoutStyles";
 import AgendaManutencao from "./tabs/calendario";
 
@@ -10,7 +11,7 @@ export default function Index() {
     const router = useRouter();
 const { width } = useWindowDimensions();
   return (
-    <Layout1 showChildren1={width > 600} children1={<AgendaManutencao />}>
+    <Layout>
       <View>
         <Stack.Screen options={{ title: "",  headerTitle: () => (
                             <Image
@@ -21,26 +22,14 @@ const { width } = useWindowDimensions();
                     }}
                 />
 
-        <View style={{...styles.containermenu}}>
-          <TouchableOpacity style={{...styles.button}} onPress={() => router.push("/login")}>
-            <Text style={styles.buttonText}>Login</Text>
-          </TouchableOpacity>
+   <AgendaManutencao />
 
-          <TouchableOpacity style={{...styles.button}} onPress={() => router.push("/tabs/listapreventiva")}>
-            <Text style={styles.buttonText}>Lista de Manutenção</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={{...styles.button}}  onPress={() => router.push("/tabs/calendario")}>
-            <Text style={styles.buttonText}>Calendario</Text>
-          </TouchableOpacity>
-
-        </View>
         
       </View>
 
       
 
-       </Layout1>
+       </Layout>
 
   );
 }
