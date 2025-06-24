@@ -16,7 +16,8 @@ export default function Index() {
         <Stack.Screen options={{ title: "" ,headerTitle: () => (
                                           <Image
                                               source={require("../../assets/images/logo.png")} // ajuste o caminho conforme necessário
-                                              style={{ width: 120, height: 40, resizeMode: "contain" }}
+                                              style={{ width: 120, height: 40 }}
+                                              resizeMode="contain"
                                           />
                                       ),
                                   }}

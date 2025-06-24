@@ -118,14 +118,14 @@ const { width } = useWindowDimensions();
     <SafeAreaView style={{...styles.containerlist, flex: 1}}>
       
      <Layout>
-      <Stack.Screen options={{ title: "" ,headerTitle: () => (
-                                        <Image
-                                            source={require("../../assets/images/logo.png")} // ajuste o caminho conforme necessário
-                                            style={{ width: 120, height: 40, resizeMode: "contain" }}
-                                        />
-                                    ),
-                                }}
-                            />
+      <Stack.Screen options={{ title: "Lista Preventiva", headerTitle: () => (
+  <Image
+    source={require("../../assets/images/logo.png")}
+    style={{ width: 120, height: 40 }}
+    resizeMode="contain"
+  />
+),
+}} />
 
         <TextInput
         style={{...styles.input}}

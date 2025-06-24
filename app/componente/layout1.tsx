@@ -1,84 +1,98 @@
 import React from "react";
-import styles from "./layoutStyles";
+import { View, Text, Platform, StyleSheet, useWindowDimensions } from "react-native";
 
 interface LayoutProps1 {
   children?: React.ReactNode;
   children1?: React.ReactNode;
- showChildren1?: boolean;
+  showChildren1?: boolean;
 }
 
+const Layout1: React.FC<LayoutProps1> = ({ children, children1, showChildren1 }) => {
+  const { height } = useWindowDimensions();
+  // Altura mínima responsiva (exemplo: 90% da altura da tela)
+  const minHeight = height * 0.9;
 
-const Layout1: React.FC<LayoutProps1> = ({ children, children1, showChildren1}) => {
   return (
-    <div style={{ ...styles.container, minHeight: "100vh", background: "#f7f7fa" }}>
+    <View style={[styles.container, { minHeight, backgroundColor: "#f7f7fa" }]}> 
       {/* Cabeçalho */}
-      <header style={{ ...styles.header, marginBottom: 0 }}>
-        <h1 style={{ fontSize: 36, fontWeight: 700, letterSpacing: 1, color: "#fff", margin: 0, padding: 24 }}>Manutenção Preventiva</h1>
-      </header>
-
+      <View style={[styles.header, { marginBottom: 0 }]}> 
+        <Text style={styles.headerText}>Manutenção Preventiva</Text>
+      </View>
       {/* Conteúdo Principal */}
-      <main style={{
-        ...styles.main,
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "flex-start",
-        minHeight: "70vh",
-        gap: 40,
-        padding: 0,
-        margin: 0,
-      }}>
+      <View style={styles.mainRow}>
         {/* Coluna do calendário */}
-        <div style={{
-          background: "#fff",
-          borderRadius: 16,
-          boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
-          padding: 32,
-          marginTop: 32,
-          marginBottom: 32,
-          minWidth: 340,
-          maxWidth: 400,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}>
-          {/* O calendário será renderizado aqui via children1 */}
+        <View style={[
+          styles.calendarCol,
+          Platform.OS === "web"
+            ? { boxShadow: "0 4px 16px rgba(0,0,0,0.08)" }
+            : { shadowColor: "#000", shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.08, shadowRadius: 4, elevation: 2 },
+        ]}>
           {showChildren1 && children1}
-        </div>
+        </View>
         {/* Coluna do conteúdo principal */}
-        <div style={{
-          ...styles.content,
-          background: "#fff",
-          borderRadius: 16,
-          boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
-          padding: 32,
-          marginTop: 32,
-          marginBottom: 32,
-          minWidth: 400,
-          maxWidth: 600,
-        }}>
+        <View style={[
+          styles.contentCol,
+          Platform.OS === "web"
+            ? { boxShadow: "0 4px 16px rgba(0,0,0,0.08)" }
+            : { shadowColor: "#000", shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.08, shadowRadius: 4, elevation: 2 },
+        ]}>
           {children}
-        </div>
-      </main>
-      {/* Rodapé */}
-      <footer style={{
-        ...styles.footer,
-        position: "fixed",
-        left: 0,
-        bottom: 0,
-        width: "100%",
-        zIndex: 100,
-        background: "#222C36",
-        color: "#fff",
-        fontSize: 14,
-        textAlign: "center",
-        padding: "10px 0",
-      }}>
-        <p style={{ margin: 0 }}>© 2025 Unimed Campos, Manutenção Preventiva. Todos os direitos reservados.</p>
-      </footer>
-    </div>
+        </View>
+      </View>
+    </View>
   );
 };
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: "column",
+    overflow: "hidden",
+  },
+  header: {
+    backgroundColor: "#222C36",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 24,
+    marginBottom: 0,
+  },
+  headerText: {
+    fontSize: 36,
+    fontWeight: "700",
+    letterSpacing: 1,
+    color: "#fff",
+    margin: 0,
+    padding: 0,
+  },
+  mainRow: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "flex-start",
+    minHeight: 400,
+    padding: 0,
+    margin: 0,
+    width: "100%",
+  },
+  calendarCol: {
+    backgroundColor: "#fff",
+    borderRadius: 16,
+    padding: 32,
+    marginTop: 32,
+    marginBottom: 32,
+    minWidth: 340,
+    maxWidth: 400,
+    alignItems: "center",
+    marginRight: 20,
+  },
+  contentCol: {
+    backgroundColor: "#fff",
+    borderRadius: 16,
+    padding: 32,
+    marginTop: 32,
+    marginBottom: 32,
+    minWidth: 400,
+    maxWidth: 600,
+  },
+});
 
 export default Layout1;

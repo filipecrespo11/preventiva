@@ -182,11 +182,15 @@ const AgendaManutencao: React.FC = () => {
       backgroundColor: "#fff",
       borderRadius: 12,
       padding: 12,
-      shadowColor: "#000",
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.08,
-      shadowRadius: 4,
-      elevation: 2,
+      ...(Platform.OS === "web"
+        ? { boxShadow: "0 2px 8px rgba(0,0,0,0.08)" }
+        : {
+            shadowColor: "#000",
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.08,
+            shadowRadius: 4,
+            elevation: 2,
+          }),
     },
     input: {
       borderWidth: 1,
@@ -205,11 +209,15 @@ const AgendaManutencao: React.FC = () => {
       padding: 16,
       marginVertical: 8,
       marginHorizontal: 10,
-      shadowColor: "#000",
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.10,
-      shadowRadius: 6,
-      elevation: 3,
+      ...(Platform.OS === "web"
+        ? { boxShadow: "0 2px 12px rgba(0,0,0,0.10)" }
+        : {
+            shadowColor: "#000",
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.10,
+            shadowRadius: 6,
+            elevation: 3,
+          }),
       borderWidth: 1,
       borderColor: "#e0e0e0",
     },
@@ -385,7 +393,7 @@ const AgendaManutencao: React.FC = () => {
                   <Text style={localStyles.cardLabel}>{item.tipo_manutencao}</Text>
                 </View>
               ))
-            )}
+            }
           </View>
 
           {/* Lista customizada de itens da agenda para o dia selecionado */}
@@ -405,12 +413,14 @@ const AgendaManutencao: React.FC = () => {
           </View>
         </View>
       </View>
-      <Stack.Screen options={{ title: "", headerTitle: () => (
+      <Stack.Screen options={{ title: "Calendário", headerTitle: () => (
         <Image
           source={require("../../assets/images/logo.png")}
-          style={{ width: 120, height: 40, resizeMode: "contain" }}
+          style={{ width: 120, height: 40 }}
+          resizeMode="contain"
         />
-      ), }} />
+      ),
+      }} />
     </Layout2>
   );
 };
