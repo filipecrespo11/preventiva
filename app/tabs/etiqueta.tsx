@@ -4,7 +4,7 @@ import QRCode from "react-native-qrcode-svg";
 import { captureRef } from "react-native-view-shot";
 import * as Sharing from "expo-sharing";
 import axios from "axios";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../src/context/AuthContext";
 import * as Print from "expo-print";
 import Layout from "../componente/layout";
 import { Stack } from "expo-router";

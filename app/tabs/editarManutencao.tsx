@@ -3,7 +3,7 @@ import { View, Text, TextInput, Button, Alert, ActivityIndicator, TouchableOpaci
 import axios from "axios";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import styles from "../componente/layoutStyles";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../src/context/AuthContext";
 import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import Layout from "../componente/layout";
 

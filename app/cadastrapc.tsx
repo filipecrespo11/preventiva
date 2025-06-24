@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useRouter, Stack } from "expo-router";
-import { useAuth } from "./context/AuthContext"; // Importa o contexto de autenticação
+import { useAuth } from "../src/context/AuthContext";
 import Layout from "./componente/layout";
 import styles from "./componente/layoutStyles";
 import { Button, TextInput, View, Text, StyleSheet, Image } from "react-native";

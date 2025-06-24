@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter, Stack } from "expo-router";
-import { useAuth } from "./context/AuthContext";
+import { useAuth } from "../src/context/AuthContext";
 import { Picker } from "@react-native-picker/picker";
 import {jwtDecode} from "jwt-decode";
 import Layout from "./componente/layout";

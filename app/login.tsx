@@ -3,7 +3,7 @@ import { View, Text, TextInput, Button, Alert, Platform, Image } from "react-nat
 import { useState } from "react";
 import axios from "axios";
 import { useRouter, Stack } from "expo-router";
-import { useAuth } from "./context/AuthContext";
+import { useAuth } from "../src/context/AuthContext";
 import Layout from "./componente/layout";
 
 const urlink = process.env.EXPO_PUBLIC_URI_HOST;

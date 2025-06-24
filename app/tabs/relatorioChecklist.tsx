@@ -3,7 +3,7 @@ import { View, Text, Button, ScrollView, Alert, Platform, TextInput, TouchableOp
 import { useLocalSearchParams, useRouter } from "expo-router";
 import * as Print from "expo-print";
 import axios from "axios";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../src/context/AuthContext";
 import Layout from "../componente/layout";
 import { Stack } from "expo-router"
 

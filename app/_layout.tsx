@@ -1,4 +1,5 @@
-import { AuthProvider, useAuth } from "./context/AuthContext";
+import { AuthProvider } from "../src/context/AuthContext";
+import { useAuth } from "../src/context/AuthContext";
 import { Image, View, Text, TouchableOpacity } from "react-native";
 import { Drawer } from "expo-router/drawer";
 import { useRouter } from "expo-router";

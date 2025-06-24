@@ -1,3 +1,5 @@
+// Arquivo movido de app/context/AuthContext.tsx para src/context/AuthContext.tsx
+// ...código original aqui...
 import React, { createContext, useState, useContext } from "react";
 
 // Define o tipo do contexto

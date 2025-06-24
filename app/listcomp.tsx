@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, SafeAreaView, TextInput, Image } from "react-native";
 import axios from "axios";
 import { useRouter, Stack } from "expo-router";
-import { useAuth } from "./context/AuthContext";
+import { useAuth } from "../src/context/AuthContext";
 import styles from "./componente/layoutStyles";
 import { Picker } from "@react-native-picker/picker";
 import Layout from "./componente/layout";
