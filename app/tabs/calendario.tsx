@@ -393,7 +393,7 @@ const AgendaManutencao: React.FC = () => {
                   <Text style={localStyles.cardLabel}>{item.tipo_manutencao}</Text>
                 </View>
               ))
-            }
+            )}
           </View>
 
           {/* Lista customizada de itens da agenda para o dia selecionado */}
